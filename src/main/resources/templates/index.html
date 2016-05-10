@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Testerka v2</title>
+
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-6">
+            Plansza o wymiarach 6x6 zawiera N samochodów. Samochody na planszy są ustawione w pionie albo w poziomie,
+            oraz zajmują dwa lub trzy pola na planszy. Adres pola planszy składa się z punktu (x, y), gdzie x i y są z
+            przedziału [0, 5] oraz lewy dolny róg planszy ma współrzędne (0, 0) natomiast prawy górny róg współrzędne
+            (5, 5). Samochody mogą się poruszać tylko do przodu lub w tyłu zgodnie ze swoim położeniem. Samochody nie
+            mogą wyjeżdzać poza granice planszy lub najeżdzać na siebie. Samochód oznaczony identyfikatorem X, który
+            musi osiągnąć pole o adresie (5, 3) jednym swoim końcem. Pod uwagę będzie brana również pojedyncza liczba
+            przesunięć każdego samochodu, tj. ruch samochodu w prawo o x pól będzie liczony jako x.
+        </div>
+        <div class="col-xs-6">
+            <form action="/submit" method="post">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Your name" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <select class="form-control" name="solution.language">
+                        <option value="python2">python 2</option>
+                        <option value="python3">python 3</option>
+                        <option value="java">java 1.8</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <input type="file" name="solution.source" placeholder="Your name">
+                </div>
+
+                <div class="row">
+                    <div class="col-xs-12 text-center">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
