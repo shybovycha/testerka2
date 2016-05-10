@@ -10,11 +10,15 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.io.IOException;
+import java.util.Scanner;
 
 @EnableAutoConfiguration
 @EnableJpaRepositories("checker.repositories")
@@ -25,12 +29,14 @@ public class RootController {
     SolutionRepository solutionRepository;
 
     @RequestMapping("/")
-    String home() {
+    String home(Model model) {
+        model.addAttribute("solution", new Solution());
+
         return "index";
     }
 
-    @RequestMapping(value = "/solution")
-    String viewSolution(@RequestParam("id") Long solutionId, Model model) {
+    @RequestMapping(value = "/solution/{id}")
+    String viewSolution(@PathVariable("id") Long solutionId, Model model) {
         Solution solution = solutionRepository.findOne(solutionId);
 
         model.addAttribute("solution", solution);
@@ -39,7 +45,30 @@ public class RootController {
     }
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
-    ModelAndView submitSolution(@ModelAttribute Solution solution, ModelMap model) {
+    ModelAndView submitSolution(@RequestParam("source") MultipartFile sourceFile,
+                                @RequestParam() String language,
+                                @RequestParam("author") String author,
+                                ModelMap model) {
+        Solution solution = new Solution();
+
+        if (!sourceFile.isEmpty()) {
+            StringBuilder source = new StringBuilder();
+
+            try {
+                Scanner scanner = new Scanner(sourceFile.getInputStream());
+
+                while (scanner.hasNext())
+                    source.append(scanner.nextLine());
+            } catch (IOException e) {
+                // TODO: logger
+            }
+
+            solution.setSource(source.toString());
+        }
+
+        solution.setAuthor(author);
+        solution.setLanguage(language);
+
         solutionRepository.save(solution);
 
         model.addAttribute("solutionId", solution.getId());

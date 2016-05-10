@@ -20,13 +20,13 @@
             przesunięć każdego samochodu, tj. ruch samochodu w prawo o x pól będzie liczony jako x.
         </div>
         <div class="col-xs-6">
-            <form action="/submit" method="post">
+            <form action="/submit" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <input type="text" name="name" placeholder="Your name" class="form-control">
+                    <input type="text" name="author" placeholder="Your name" class="form-control" />
                 </div>
 
                 <div class="form-group">
-                    <select class="form-control" name="solution.language">
+                    <select class="form-control" name="language">
                         <option value="python2">python 2</option>
                         <option value="python3">python 3</option>
                         <option value="java">java 1.8</option>
@@ -34,7 +34,7 @@
                 </div>
 
                 <div class="form-group">
-                    <input type="file" name="solution.source" placeholder="Your name">
+                    <input type="file" placeholder="Your name" name="source" />
                 </div>
 
                 <div class="row">

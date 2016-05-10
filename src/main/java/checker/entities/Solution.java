@@ -2,10 +2,7 @@ package checker.entities;
 
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by shybovycha on 10/05/16.
@@ -16,7 +13,11 @@ public class Solution {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    protected String author;
+
+    @Lob
     protected String source;
+
     protected String language;
 
     public enum SolutionStatus { PENDING, CHECKING, DONE };
@@ -55,8 +56,16 @@ public class Solution {
         return source;
     }
 
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     public String getLanguage() {
         return language;
+    }
+
+    public void setLanguage(String language) {
+        this.language = language;
     }
 
     public SolutionStatus getStatus() {
@@ -65,6 +74,14 @@ public class Solution {
 
     public void setStatus(SolutionStatus status) {
         this.status = status;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
     }
 
     protected String getOutputFor(String input) throws Exception {
