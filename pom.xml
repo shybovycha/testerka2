@@ -2,7 +2,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>org.springframework</groupId>
+    <groupId>pl.edu.uj.ii</groupId>
     <artifactId>testerka2</artifactId>
     <packaging>jar</packaging>
     <version>0.1.0</version>
@@ -25,15 +25,22 @@
                 <targetPath>static</targetPath>
             </resource>
         </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>web_application.RootController</mainClass>
+                    <classifier>webapp</classifier>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
 
     <profiles>
         <profile>
             <id>webapp</id>
-
-            <properties>
-                <envClassifier>webapp</envClassifier>
-            </properties>
 
             <build>
                 <plugins>
@@ -53,7 +60,7 @@
             <id>worker</id>
 
             <properties>
-                <envClassifier>worker</envClassifier>
+                <spring.main.web_environment>false</spring.main.web_environment>
             </properties>
 
             <build>
@@ -64,6 +71,7 @@
                         <configuration>
                             <mainClass>worker.WorkerRunner</mainClass>
                             <classifier>worker</classifier>
+                            <excludeArtifactIds>spring-boot-starter-web,spring-boot-starter-mustache</excludeArtifactIds>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -74,29 +82,24 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
+            <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mustache</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>5.1.38</version>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-thymeleaf</artifactId>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-devtools</artifactId>-->
-            <!--<optional>true</optional>-->
-        <!--</dependency>-->
     </dependencies>
 </project>

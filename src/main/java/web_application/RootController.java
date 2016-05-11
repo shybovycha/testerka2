@@ -9,13 +9,11 @@ import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -45,10 +43,9 @@ public class RootController {
     }
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
-    ModelAndView submitSolution(@RequestParam("source") MultipartFile sourceFile,
+    String submitSolution(@RequestParam("source") MultipartFile sourceFile,
                                 @RequestParam() String language,
-                                @RequestParam("author") String author,
-                                ModelMap model) {
+                                @RequestParam("author") String author) {
         Solution solution = new Solution();
 
         if (!sourceFile.isEmpty()) {
@@ -71,9 +68,7 @@ public class RootController {
 
         solutionRepository.save(solution);
 
-        model.addAttribute("solutionId", solution.getId());
-
-        return new ModelAndView("redirect:/solution", model);
+        return String.format("redirect:/solution/%d", solution.getId());
     }
 
     public static void main(String[] args) throws Exception {

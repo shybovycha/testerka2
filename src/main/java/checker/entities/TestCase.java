@@ -1,9 +1,6 @@
 package checker.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 /**
  * Created by shybovycha on 10/05/16.
@@ -14,6 +11,7 @@ public class TestCase {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
+    @Lob
     private String input;
 
     public TestCase() {}
