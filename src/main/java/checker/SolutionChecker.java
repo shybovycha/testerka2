@@ -1,8 +1,12 @@
 package checker;
 
+import checker.entities.Solution;
 import checker.entities.SolutionResult;
 import checker.entities.TestCase;
+import checker.repositories.SolutionRepository;
+import checker.repositories.SolutionResultRepository;
 import checker.repositories.TestCaseRepository;
+import checker.runners.SolutionRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 /**
  * Created by shybovycha on 10/05/16.
@@ -304,35 +309,71 @@ public class SolutionChecker {
     @Autowired
     private TestCaseRepository testCaseRepository;
 
+    @Autowired
+    private SolutionRepository solutionRepository;
+
+    @Autowired
+    private SolutionResultRepository solutionResultRepository;
+
+    @Autowired
+    private List<SolutionRunner> runnersAvailable;
+
     // gets list of test cases passed successfully
-    public List<SolutionResult> check(RunnableSolution solution) {
-        List<SolutionResult> results = new ArrayList<>();
+    public void check(Solution solution) {
+        Optional<SolutionRunner> runner = runnersAvailable.stream().filter(r -> r.accepts(solution)).findFirst();
+
+        // Fixme: use logger
+        System.out.printf(">> CHECKING SOLUTION %d\n", solution.getId());
+
+        if (!runner.isPresent()) {
+            solution.setStatus(Solution.SolutionStatus.REJECTED);
+            solutionRepository.save(solution);
+            System.out.printf(">> REJECTED - %s HAS NO MATCH\n", solution.getLanguage());
+            return;
+        }
 
         // as we do not have dependency injection here, we have no TestCaseRepository
         // thus make this class being instantiated once
-        Iterable<TestCase> testCases = testCaseRepository.findAll();
+        Iterable<TestCase> testCaseEntities = testCaseRepository.findAll();
 
-        for (TestCase testCase : testCases) {
-            results.add(new SolutionResult(solution, testCase, checkSingleTest(solution, testCase)));
+        System.out.printf(">> RUNNING TEST CASES...\n");
+
+        List<SolutionResult> results = StreamSupport
+                .stream(testCaseEntities.spliterator(), false)
+                .map(testCase -> new SolutionResult(solution, testCase, checkSingleTest(runner.get(), solution, testCase)))
+                .collect(Collectors.toList());
+
+        results.stream().forEach(result -> solutionResultRepository.save(result));
+
+        if (results.stream().allMatch(SolutionResult::isPassed)) {
+            solution.setStatus(Solution.SolutionStatus.PASSED_CORRECT);
+        } else {
+            solution.setStatus(Solution.SolutionStatus.PASSED_INCORRECT);
         }
 
-        return results;
+        solutionRepository.save(solution);
     }
 
-    public boolean checkSingleTest(RunnableSolution solution, checker.entities.TestCase testCase) {
-        String output = solution.getOutputFor(testCase.getInput());
+    public boolean checkSingleTest(SolutionRunner runner, Solution solution, checker.entities.TestCase testCase) {
+        try {
+            String output = runner.getOutputFor(solution, testCase.getInput());
 
-        Field field = new FieldParser().parseField(testCase.getInput());
+            Field field = new FieldParser().parseField(testCase.getInput());
 
-        List<Move> moves = new MoveParser(field).parseAll(output);
+            List<Move> moves = new MoveParser(field).parseAll(output);
 
-        for (Move move : moves) {
-            if (!field.isMoveValid(move))
-                return false;
+            for (Move move : moves) {
+                if (!field.isMoveValid(move))
+                    return false;
 
-            field = field.applyMove(move);
+                field = field.applyMove(move);
+            }
+
+            return field.isSolved();
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            return false;
         }
-
-        return field.isSolved();
     }
 }

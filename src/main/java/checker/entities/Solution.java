@@ -20,7 +20,7 @@ public class Solution {
 
     protected String language;
 
-    public enum SolutionStatus { PENDING, CHECKING, DONE };
+    public enum SolutionStatus { PENDING, CHECKING, REJECTED, PASSED_CORRECT, PASSED_INCORRECT };
 
     protected SolutionStatus status;
 
@@ -94,8 +94,14 @@ public class Solution {
         if (status == SolutionStatus.CHECKING)
             return "Checking...";
 
-        if (status == SolutionStatus.DONE)
-            return (results.size() > 0 && results.stream().allMatch(r -> r.isPassed())) ? "<b>Solution correct</b>" : "<b>Solution is wrong</b>";
+        if (status == SolutionStatus.REJECTED)
+            return "Rejected (due to internal system error)";
+
+        if (status == SolutionStatus.PASSED_CORRECT)
+            return "Correct";
+
+        if (status == SolutionStatus.PASSED_INCORRECT)
+            return "Incorrect";
 
         return "Unknown O_o";
     }

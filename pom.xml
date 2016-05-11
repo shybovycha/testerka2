@@ -18,31 +18,22 @@
     </parent>
 
     <!-- Well, fuck you, Maven! Spent three damn hours looking for the reason Spring Boot did not serve my statics! -->
-    <build>
-        <resources>
-            <resource>
-                <directory>src/main/static</directory>
-                <targetPath>static</targetPath>
-            </resource>
-        </resources>
-
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <mainClass>web_application.RootController</mainClass>
-                    <classifier>webapp</classifier>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
     <profiles>
         <profile>
             <id>webapp</id>
 
             <build>
+                <resources>
+                    <resource>
+                        <directory>src/main/resources/static</directory>
+                        <targetPath>static</targetPath>
+                    </resource>
+                    <resource>
+                        <directory>src/main/resources/templates</directory>
+                        <targetPath>templates</targetPath>
+                    </resource>
+                </resources>
+
                 <plugins>
                     <plugin>
                         <groupId>org.springframework.boot</groupId>

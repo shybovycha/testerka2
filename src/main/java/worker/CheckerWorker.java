@@ -1,8 +1,6 @@
 package worker;
 
-import checker.RunnableSolution;
 import checker.SolutionChecker;
-import checker.SolutionFactory;
 import checker.entities.Solution;
 import checker.repositories.SolutionRepository;
 import checker.repositories.SolutionResultRepository;
@@ -33,9 +31,6 @@ public class CheckerWorker {
     SolutionResultRepository solutionResultRepository;
 
     @Autowired
-    SolutionFactory solutionFactory;
-
-    @Autowired
     SolutionChecker checker;
 
     @Transactional
@@ -47,15 +42,7 @@ public class CheckerWorker {
             solution.setStatus(Solution.SolutionStatus.CHECKING);
             solutionRepository.save(solution);
 
-            RunnableSolution runnable = solutionFactory.forLanguage(solution);
-
-            if (runnable == null)
-                continue;
-
-            solutionResultRepository.save(checker.check(runnable));
-
-            solution.setStatus(Solution.SolutionStatus.DONE);
-            solutionRepository.save(solution);
+            checker.check(solution);
         }
     }
 }
