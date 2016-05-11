@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,7 @@ import java.util.Scanner;
 @EnableAutoConfiguration
 @EnableJpaRepositories("checker.repositories")
 @EntityScan("checker.entities")
+@ComponentScan("checker")
 @Controller
 public class RootController {
     @Autowired
@@ -54,8 +56,10 @@ public class RootController {
             try {
                 Scanner scanner = new Scanner(sourceFile.getInputStream());
 
-                while (scanner.hasNext())
+                while (scanner.hasNextLine()) {
                     source.append(scanner.nextLine());
+                    source.append("\n");
+                }
             } catch (IOException e) {
                 // TODO: logger
             }

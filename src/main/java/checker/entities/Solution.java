@@ -1,8 +1,7 @@
 package checker.entities;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import javax.persistence.*;
+import java.util.List;
 
 /**
  * Created by shybovycha on 10/05/16.
@@ -14,6 +13,7 @@ public class Solution {
     private long id;
 
     protected String author;
+    protected String moduleName;
 
     @Lob
     protected String source;
@@ -24,6 +24,9 @@ public class Solution {
 
     protected SolutionStatus status;
 
+    @OneToMany
+    protected List<SolutionResult> results;
+
     public Solution() {
         this.status = SolutionStatus.PENDING;
         this.language = "UNKNOWN";
@@ -32,20 +35,20 @@ public class Solution {
     public Solution(String source) {
         this.source = source;
         this.status = SolutionStatus.PENDING;
-        this.language = "UNKNOWN";
+        this.language = this.getAcceptedLanguage();
     }
 
-    public String run(String input) {
-        // TODO: timeout check
-        String result = null;
+    public Solution(Solution source) {
+        this.id = source.id;
+        this.author = source.author;
+        this.language = this.getAcceptedLanguage();
+        this.moduleName = source.moduleName;
+        this.source = source.source;
+        this.status = source.status;
+    }
 
-        try {
-            result = this.getOutputFor(input);
-        } catch (Exception e) {
-            // TODO: logger
-        }
-
-        return result;
+    public String getAcceptedLanguage() {
+        return "UNKNOWN";
     }
 
     public long getId() {
@@ -84,7 +87,16 @@ public class Solution {
         this.author = author;
     }
 
-    protected String getOutputFor(String input) throws Exception {
-        throw new NotImplementedException();
+    public String getStatusString() {
+        if (status == SolutionStatus.PENDING)
+            return "Waiting for check";
+
+        if (status == SolutionStatus.CHECKING)
+            return "Checking...";
+
+        if (status == SolutionStatus.DONE)
+            return (results.size() > 0 && results.stream().allMatch(r -> r.isPassed())) ? "<b>Solution correct</b>" : "<b>Solution is wrong</b>";
+
+        return "Unknown O_o";
     }
 }

@@ -1,6 +1,5 @@
 package checker;
 
-import checker.entities.Solution;
 import checker.entities.SolutionResult;
 import checker.entities.TestCase;
 import checker.repositories.TestCaseRepository;
@@ -208,7 +207,7 @@ class FieldParser {
         Scanner scanner = new Scanner(new StringReader(input));
 
         try {
-            int n = scanner.nextInt();
+            int n = Integer.parseInt(scanner.nextLine());
 
             for (int i = 0; i < n; i++) {
                 cars.add(Car.parseString(scanner.nextLine()));
@@ -262,7 +261,7 @@ class MoveParser {
         try {
             Scanner scanner = new Scanner(new StringReader(input));
 
-            int n = scanner.nextInt();
+            int n = Integer.parseInt(scanner.nextLine());
 
             for (int i = 0; i < n; i++) {
                 String s = scanner.nextLine();
@@ -306,7 +305,7 @@ public class SolutionChecker {
     private TestCaseRepository testCaseRepository;
 
     // gets list of test cases passed successfully
-    public List<SolutionResult> check(Solution solution) {
+    public List<SolutionResult> check(RunnableSolution solution) {
         List<SolutionResult> results = new ArrayList<>();
 
         // as we do not have dependency injection here, we have no TestCaseRepository
@@ -320,8 +319,8 @@ public class SolutionChecker {
         return results;
     }
 
-    public boolean checkSingleTest(Solution solution, checker.entities.TestCase testCase) {
-        String output = solution.run(testCase.getInput());
+    public boolean checkSingleTest(RunnableSolution solution, checker.entities.TestCase testCase) {
+        String output = solution.getOutputFor(testCase.getInput());
 
         Field field = new FieldParser().parseField(testCase.getInput());
 
@@ -330,6 +329,8 @@ public class SolutionChecker {
         for (Move move : moves) {
             if (!field.isMoveValid(move))
                 return false;
+
+            field = field.applyMove(move);
         }
 
         return field.isSolved();

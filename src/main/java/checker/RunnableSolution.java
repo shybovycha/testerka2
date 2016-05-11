@@ -3,6 +3,7 @@ package checker;
 import checker.entities.Solution;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 /**
@@ -13,8 +14,11 @@ public abstract class RunnableSolution extends Solution {
         super(source);
     }
 
-    @Override
-    protected String getOutputFor(String input) {
+    public RunnableSolution(Solution source) {
+        super(source);
+    }
+
+    public String getOutputFor(String input) {
         return runBinary(input);
     }
 
@@ -22,14 +26,31 @@ public abstract class RunnableSolution extends Solution {
 
     protected String runBinary(String input) {
         StringBuilder output = new StringBuilder();
+        StringBuilder errors = new StringBuilder();
+
         Process process = null;
 
         try {
             process = this.getRunProcessBuilder().start();
-            Scanner scanner = new Scanner(process.getInputStream());
 
-            while (scanner.hasNextLine())
-                output.append(scanner.nextLine());
+            Scanner stdoutScanner = new Scanner(process.getInputStream());
+            Scanner stderrScanner = new Scanner(process.getErrorStream());
+            PrintWriter writer = new PrintWriter(process.getOutputStream());
+
+            writer.write("1\n"); // FIXME: number of test cases
+
+            writer.write(input);
+            writer.close();
+
+            while (stdoutScanner.hasNextLine()) {
+                output.append(stdoutScanner.nextLine()).append("\n");
+            }
+
+            while (stderrScanner.hasNextLine()) {
+                errors.append(stderrScanner.nextLine()).append("\n");
+            }
+
+            System.out.printf("ERRORS: %s", errors.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

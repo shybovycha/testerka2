@@ -1,5 +1,7 @@
 package checker;
 
+import checker.entities.Solution;
+
 import java.io.IOException;
 
 /**
@@ -7,6 +9,10 @@ import java.io.IOException;
  */
 public abstract class CompiledSolution extends RunnableSolution {
     protected String binaryFile;
+
+    public CompiledSolution(Solution source) {
+        super(source);
+    }
 
     public CompiledSolution(String sourceFile) {
         super(sourceFile);
@@ -23,12 +29,11 @@ public abstract class CompiledSolution extends RunnableSolution {
     }
 
     protected void compile() {
-        Process process = null;
-
         try {
-            process = this.getRunProcessBuilder().start();
+            ProcessBuilder pb = this.getCompileProcessBuilder();
 
-            this.binaryFile = String.format("solution_%d.bin", this.getId());
+            pb.start();
+            pb.redirectErrorStream();
         } catch (IOException e) {
             e.printStackTrace();
         }
