@@ -5,6 +5,7 @@ import checker.entities.SolutionResult;
 import checker.entities.TestCase;
 import checker.repositories.TestCaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -297,6 +298,7 @@ class Point {
     }
 }
 
+@Component
 public class SolutionChecker {
     public SolutionChecker() {}
 
@@ -307,6 +309,8 @@ public class SolutionChecker {
     public List<SolutionResult> check(Solution solution) {
         List<SolutionResult> results = new ArrayList<>();
 
+        // as we do not have dependency injection here, we have no TestCaseRepository
+        // thus make this class being instantiated once
         Iterable<TestCase> testCases = testCaseRepository.findAll();
 
         for (TestCase testCase : testCases) {

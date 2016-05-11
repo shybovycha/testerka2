@@ -7,6 +7,7 @@ import checker.repositories.SolutionResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.orm.jpa.EntityScan;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @EnableJpaRepositories("checker.repositories")
 @EntityScan("checker.entities")
 @EnableAutoConfiguration
+@ComponentScan("checker")
 public class CheckerWorker {
     @Autowired
     SolutionRepository solutionRepository;
@@ -28,12 +30,13 @@ public class CheckerWorker {
     @Autowired
     SolutionResultRepository solutionResultRepository;
 
+    @Autowired
+    SolutionChecker checker;
+
     @Transactional
     @Scheduled(fixedRate = 5000)
     public void checkForPendingSolutions() {
         Iterable<Solution> pendingSolutions = solutionRepository.findByStatus(Solution.SolutionStatus.PENDING);
-
-        SolutionChecker checker = new SolutionChecker();
 
         for (Solution solution : pendingSolutions) {
             solution.setStatus(Solution.SolutionStatus.CHECKING);
