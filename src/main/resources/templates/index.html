@@ -11,14 +11,43 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-xs-6">
-            Plansza o wymiarach 6x6 zawiera N samochodów. Samochody na planszy są ustawione w pionie albo w poziomie,
-            oraz zajmują dwa lub trzy pola na planszy. Adres pola planszy składa się z punktu (x, y), gdzie x i y są z
-            przedziału [0, 5] oraz lewy dolny róg planszy ma współrzędne (0, 0) natomiast prawy górny róg współrzędne
-            (5, 5). Samochody mogą się poruszać tylko do przodu lub w tyłu zgodnie ze swoim położeniem. Samochody nie
-            mogą wyjeżdzać poza granice planszy lub najeżdzać na siebie. Samochód oznaczony identyfikatorem X, który
-            musi osiągnąć pole o adresie (5, 3) jednym swoim końcem. Pod uwagę będzie brana również pojedyncza liczba
-            przesunięć każdego samochodu, tj. ruch samochodu w prawo o x pól będzie liczony jako x.
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>Problem</h2>
+
+                    Plansza o wymiarach <code>6x6</code> zawiera <code>N</code> samochodów.
+                    Samochody na planszy są ustawione w pionie albo w poziomie,
+                    oraz zajmują dwa lub trzy pola na planszy. Adres pola planszy składa się z punktu <code>(x, y)</code>, gdzie
+                    <code>x</code> i <code>y</code> są z
+                    przedziału <code>[0, 5]</code> oraz lewy dolny róg planszy ma współrzędne <code>(0, 0)</code> natomiast prawy
+                    górny róg współrzędne
+                    <code>(5, 5)</code>. Samochody mogą się poruszać tylko do przodu lub w tyłu zgodnie ze swoim położeniem. Samochody nie
+                    mogą wyjeżdzać poza granice planszy lub najeżdzać na siebie. Samochód oznaczony identyfikatorem <code>X</code>, który
+                    musi osiągnąć pole o adresie <code>(5, 3)</code> jednym swoim końcem. Pod uwagę będzie brana również pojedyncza liczba
+                    przesunięć każdego samochodu, tj. ruch samochodu w prawo o <code>x</code> pól będzie liczony jako <code>x</code>.
+                </div>
+            </div>
+
+            <!--<div class="row">
+                <div class="col-xs-12">
+                    <h2>Dane wejściowe</h2>
+            Dane do zadania są przekazywane przez standardowe wejście.
+
+            Algorytm jest uruchamiany kilkukrotnie z przykładami testowymi o różnej trudności. Pierwsza linia zawiera liczbę T przypadków testowych. Każdy przypadek testowy rozpoczyna się od liczby N samochodów na planszy. Kolejne N lini zawierają opis każdego samochodu w postaci:
+
+            [id] [start point] [direction] [length]
+            [id] - identyfikatorem samochodu jako duża litera
+            [start point] - punkt znajdujący się najblizej w pionie i poziomie do punktu (0, 0)
+            [direction] - polozenie samochodu wartosci V albo H
+            [length] - dlugość samochodu
+            Output
+
+            Dla każdego przypadku testowego należy wyświetlić w jednej lini liczbę n kroków oraz n linii ruchów samochodów po planszy. Liczba kroków oraz kroki powinny zostać przekazana na standardowe wyjście.
+
+                </div>
+            </div>-->
         </div>
+
         <div class="col-xs-6">
             <form action="/submit" method="post" enctype="multipart/form-data">
                 <div class="form-group">
@@ -27,9 +56,8 @@
 
                 <div class="form-group">
                     <select class="form-control" name="language">
-                        <!--<option value="python2">python 2</option>-->
-                        <!--<option value="python3">python 3</option>-->
                         <option value="java">java 1.8</option>
+                        <option value="cpp">c++ (GCC)</option>
                     </select>
                 </div>
 

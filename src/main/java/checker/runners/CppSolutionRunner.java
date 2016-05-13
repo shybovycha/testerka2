@@ -10,12 +10,12 @@ import java.io.PrintWriter;
  * Created by shybovycha on 12/05/16.
  */
 @Service
-public class JavaSolutionRunner extends CompiledSolutionRunner {
-    public JavaSolutionRunner() {}
+public class CppSolutionRunner extends CompiledSolutionRunner {
+    public CppSolutionRunner() {}
 
     @Override
     protected ProcessBuilder getCompilerProcessBuilder(Solution solution) {
-        String sourceFileName = "Main.java";
+        String sourceFileName = "main.cpp";
         String sourceFilePath = String.format("%s/%s", this.getSolutionDir(solution), sourceFileName);
 
         try {
@@ -24,14 +24,14 @@ public class JavaSolutionRunner extends CompiledSolutionRunner {
             File f = new File(sourceFilePath);
             PrintWriter writer = new PrintWriter(f);
 
-            writer.write(solution.getSource().replaceFirst("\\bpackage\\s+\\w+;", ""));
+            writer.write(solution.getSource());
 
             writer.close();
         } catch (Exception e) {
             // TODO: logger
         }
 
-        ProcessBuilder pb = new ProcessBuilder("javac", "-source", "1.8", "-target", "1.8", sourceFileName);
+        ProcessBuilder pb = new ProcessBuilder("g++", "-o", "main", sourceFileName);
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
@@ -39,7 +39,7 @@ public class JavaSolutionRunner extends CompiledSolutionRunner {
 
     @Override
     protected ProcessBuilder getRunProcessBuilder(Solution solution) {
-        ProcessBuilder pb = new ProcessBuilder("java", "Main");
+        ProcessBuilder pb = new ProcessBuilder("./main");
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
@@ -47,6 +47,6 @@ public class JavaSolutionRunner extends CompiledSolutionRunner {
 
     @Override
     protected String getAcceptedLanguage() {
-        return "java";
+        return "cpp";
     }
 }

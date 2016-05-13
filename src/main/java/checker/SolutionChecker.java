@@ -351,6 +351,8 @@ public class SolutionChecker {
             solution.setStatus(Solution.SolutionStatus.PASSED_INCORRECT);
         }
 
+        System.out.printf(">> DONE");
+
         solutionRepository.save(solution);
     }
 
