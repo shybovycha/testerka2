@@ -1,6 +1,7 @@
 package checker.entities;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,6 +28,9 @@ public class Solution {
     @OneToMany
     protected List<SolutionResult> results;
 
+    @Column(updatable = false, insertable = false)
+    private Date createdAt;
+
     public Solution() {
         this.status = SolutionStatus.PENDING;
         this.language = "UNKNOWN";
@@ -45,6 +49,11 @@ public class Solution {
         this.moduleName = source.moduleName;
         this.source = source.source;
         this.status = source.status;
+    }
+
+    @PrePersist
+    private void setCreatedAt() {
+        this.createdAt = new Date();
     }
 
     public String getAcceptedLanguage() {

@@ -31,7 +31,7 @@ public class CppSolutionRunner extends CompiledSolutionRunner {
             // TODO: logger
         }
 
-        ProcessBuilder pb = new ProcessBuilder("g++", "-o", "main", sourceFileName);
+        ProcessBuilder pb = new ProcessBuilder("g++", "-o", "main", sourceFileName, "-std=c++11");
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
