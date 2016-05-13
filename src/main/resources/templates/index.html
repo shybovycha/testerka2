@@ -8,69 +8,140 @@
     <link rel="stylesheet" href="/bower_components/bootstrap/dist/css/bootstrap-theme.min.css">
 </head>
 <body>
-<div class="container-fluid">
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">&nbsp;</div>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <h2>Matematyczne podstawy informatyki</h2>
+        </div>
+    </div>
     <div class="row">
         <div class="col-xs-6">
-            <div class="row">
-                <div class="col-xs-12">
-                    <h2>Problem</h2>
+            <div class="panel panel-primary">
+                <div class="panel-heading">Problem</div>
 
+                <div class="panel-body">
                     Plansza o wymiarach <code>6x6</code> zawiera <code>N</code> samochodów.
                     Samochody na planszy są ustawione w pionie albo w poziomie,
-                    oraz zajmują dwa lub trzy pola na planszy. Adres pola planszy składa się z punktu <code>(x, y)</code>, gdzie
+                    oraz zajmują dwa lub trzy pola na planszy. Adres pola planszy składa się z punktu <code>(x,
+                    y)</code>, gdzie
                     <code>x</code> i <code>y</code> są z
-                    przedziału <code>[0, 5]</code> oraz lewy dolny róg planszy ma współrzędne <code>(0, 0)</code> natomiast prawy
+                    przedziału <code>[0, 5]</code> oraz lewy dolny róg planszy ma współrzędne <code>(0,
+                    0)</code>
+                    natomiast prawy
                     górny róg współrzędne
-                    <code>(5, 5)</code>. Samochody mogą się poruszać tylko do przodu lub w tyłu zgodnie ze swoim położeniem. Samochody nie
-                    mogą wyjeżdzać poza granice planszy lub najeżdzać na siebie. Samochód oznaczony identyfikatorem <code>X</code>, który
-                    musi osiągnąć pole o adresie <code>(5, 3)</code> jednym swoim końcem. Pod uwagę będzie brana również pojedyncza liczba
-                    przesunięć każdego samochodu, tj. ruch samochodu w prawo o <code>x</code> pól będzie liczony jako <code>x</code>.
+                    <code>(5, 5)</code>. Samochody mogą się poruszać tylko do przodu lub w tyłu zgodnie ze swoim
+                    położeniem. Samochody nie
+                    mogą wyjeżdzać poza granice planszy lub najeżdzać na siebie. Samochód oznaczony
+                    identyfikatorem
+                    <code>X</code>, który
+                    musi osiągnąć pole o adresie <code>(5, 3)</code> jednym swoim końcem. Pod uwagę będzie brana
+                    również pojedyncza liczba
+                    przesunięć każdego samochodu, tj. ruch samochodu w prawo o <code>x</code> pól będzie liczony
+                    jako <code>x</code>.
                 </div>
             </div>
 
-            <!--<div class="row">
-                <div class="col-xs-12">
-                    <h2>Dane wejściowe</h2>
-            Dane do zadania są przekazywane przez standardowe wejście.
+            <div class="panel panel-primary">
+                <div class="panel-heading">Wejściowe dane</div>
+                <div class="panel-body">
+                    Dane do zadania są przekazywane przez standardowe wejście. <br>
+                    Algorytm jest uruchamiany kilkukrotnie z przykładami testowymi o różnej trudności.
+                    Pierwsza linia zawiera liczbę <code>T</code> przypadków testowych. Każdy przypadek testowy
+                    rozpoczyna się od liczby <code>N</code> samochodów na planszy. Kolejne <code>N</code> lini
+                    zawierają opis każdego samochodu w postaci:
 
-            Algorytm jest uruchamiany kilkukrotnie z przykładami testowymi o różnej trudności. Pierwsza linia zawiera liczbę T przypadków testowych. Każdy przypadek testowy rozpoczyna się od liczby N samochodów na planszy. Kolejne N lini zawierają opis każdego samochodu w postaci:
+                    <pre><code>[id] [start point] [direction] [length]</code></pre>
 
-            [id] [start point] [direction] [length]
-            [id] - identyfikatorem samochodu jako duża litera
-            [start point] - punkt znajdujący się najblizej w pionie i poziomie do punktu (0, 0)
-            [direction] - polozenie samochodu wartosci V albo H
-            [length] - dlugość samochodu
-            Output
-
-            Dla każdego przypadku testowego należy wyświetlić w jednej lini liczbę n kroków oraz n linii ruchów samochodów po planszy. Liczba kroków oraz kroki powinny zostać przekazana na standardowe wyjście.
-
+                    <ul>
+                        <li><code>[id]</code> - identyfikatorem samochodu jako duża litera</li>
+                        <li><code>[start point]</code> - punkt znajdujący się najblizej w pionie i poziomie do
+                            punktu <code>(0, 0)</code></li>
+                        <li><code>[direction]</code> - polozenie samochodu wartosci <code>V</code> albo
+                            <code>H</code></li>
+                        <li><code>[length]</code> - dlugość samochodu</li>
+                    </ul>
                 </div>
-            </div>-->
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">Wyjściowe dane</div>
+                <div class="panel-body">
+                    Dla każdego przypadku testowego należy wyświetlić w jednej lini liczbę <code>n</code> kroków
+                    oraz <code>n</code> linii ruchów samochodów po planszy. Liczba kroków oraz kroki powinny
+                    zostać
+                    przekazana na standardowe wyjście.
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">Przykład</div>
+                <div class="panel-body">
+                    <h4>Wejście</h4>
+
+                                <pre><code>1
+3
+X 0 3 H 2
+A 4 1 H 2
+C 4 2 V 3
+                                </code></pre>
+
+                    <h4>Wyjście</h4>
+                                <pre><code>
+3
+A L 2
+C D 2
+X R 4
+                                </code></pre>
+                </div>
+            </div>
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">Ograniczenia systemu</div>
+                <div class="panel-body">
+                    System działa w operacyjnym systemie Linux.
+                    Na razie z dostępnych języków są:
+                    <ul>
+                        <li>Oracle Java 1.8</li>
+                        <li>GNU C++</li>
+                    </ul>
+                    <br>
+                    W przypadku Java, należy przysłać plik, zawierający klasę <code>Main</code> z metodą
+                    <code>void main(String[])</code>.
+                </div>
+            </div>
         </div>
 
         <div class="col-xs-6">
-            <form action="/submit" method="post" enctype="multipart/form-data">
-                <div class="form-group">
-                    <input type="text" name="author" placeholder="Your name" class="form-control" />
-                </div>
+            <div class="panel panel-warning">
+                <div class="panel-heading">Wysłanie zadania</div>
+                <div class="panel-body">
+                    <form action="/submit" method="post" enctype="multipart/form-data">
+                        <div class="form-group">
+                            <input type="text" name="author" placeholder="Your name" class="form-control"/>
+                        </div>
 
-                <div class="form-group">
-                    <select class="form-control" name="language">
-                        <option value="java">java 1.8</option>
-                        <option value="cpp">c++ (GCC)</option>
-                    </select>
-                </div>
+                        <div class="form-group">
+                            <select class="form-control" name="language">
+                                <option value="java">java 1.8</option>
+                                <option value="cpp">c++ (GCC)</option>
+                            </select>
+                        </div>
 
-                <div class="form-group">
-                    <input type="file" placeholder="Your name" name="source" />
-                </div>
+                        <div class="form-group">
+                            <input type="file" placeholder="Your name" name="source"/>
+                        </div>
 
-                <div class="row">
-                    <div class="col-xs-12 text-center">
-                        <button type="submit" class="btn btn-primary">Submit</button>
-                    </div>
+                        <div class="row">
+                            <div class="col-xs-12 text-center">
+                                <button type="submit" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
