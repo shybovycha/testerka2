@@ -21,14 +21,14 @@ public class Solution {
 
     protected String language;
 
-    public enum SolutionStatus { PENDING, CHECKING, REJECTED, PASSED_CORRECT, PASSED_INCORRECT };
+    public enum SolutionStatus { PENDING, CHECKING, REJECTED, PASSED_CORRECT, PASSED_INCORRECT, RUN_ERROR };
 
     protected SolutionStatus status;
 
     @OneToMany
     protected List<SolutionResult> results;
 
-    @Column(updatable = false, insertable = false)
+    @Column(updatable = false)
     private Date createdAt;
 
     public Solution() {
@@ -111,6 +111,9 @@ public class Solution {
 
         if (status == SolutionStatus.PASSED_INCORRECT)
             return "Incorrect";
+
+        if (status == SolutionStatus.RUN_ERROR)
+            return "Errors while running occured";
 
         return "Unknown O_o";
     }

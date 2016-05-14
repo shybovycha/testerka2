@@ -16,7 +16,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 /**
  * Created by shybovycha on 10/05/16.
@@ -338,10 +337,23 @@ public class SolutionChecker {
 
         System.out.printf(">> RUNNING TEST CASES...\n");
 
-        List<SolutionResult> results = StreamSupport
-                .stream(testCaseEntities.spliterator(), false)
-                .map(testCase -> new SolutionResult(solution, testCase, checkSingleTest(runner.get(), solution, testCase)))
-                .collect(Collectors.toList());
+        List<SolutionResult> results = new ArrayList<>();
+
+        try {
+            for (TestCase testCase : testCaseEntities) {
+                boolean passed = checkSingleTest(runner.get(), solution, testCase);
+                SolutionResult result = new SolutionResult(solution, testCase, passed);
+                results.add(result);
+            }
+        } catch (Exception e) {
+            solution.setStatus(Solution.SolutionStatus.RUN_ERROR);
+            solutionRepository.save(solution);
+
+            e.printStackTrace();
+            System.out.printf(">> ERRORS DURING RUN.\n");
+            
+            return;
+        }
 
         results.stream().forEach(result -> solutionResultRepository.save(result));
 
@@ -356,26 +368,20 @@ public class SolutionChecker {
         solutionRepository.save(solution);
     }
 
-    public boolean checkSingleTest(SolutionRunner runner, Solution solution, checker.entities.TestCase testCase) {
-        try {
-            String output = runner.getOutputFor(solution, testCase.getInput());
+    public boolean checkSingleTest(SolutionRunner runner, Solution solution, checker.entities.TestCase testCase) throws Exception {
+        String output = runner.getOutputFor(solution, testCase.getInput());
 
-            Field field = new FieldParser().parseField(testCase.getInput());
+        Field field = new FieldParser().parseField(testCase.getInput());
 
-            List<Move> moves = new MoveParser(field).parseAll(output);
+        List<Move> moves = new MoveParser(field).parseAll(output);
 
-            for (Move move : moves) {
-                if (!field.isMoveValid(move))
-                    return false;
+        for (Move move : moves) {
+            if (!field.isMoveValid(move))
+                return false;
 
-                field = field.applyMove(move);
-            }
-
-            return field.isSolved();
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            return false;
+            field = field.applyMove(move);
         }
+
+        return field.isSolved();
     }
 }
