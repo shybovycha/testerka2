@@ -56,7 +56,7 @@
                     <pre><code>[id] [start point] [direction] [length]</code></pre>
 
                     <ul>
-                        <li><code>[id]</code> - identyfikatorem samochodu jako duża litera</li>
+                        <li><code>[id]</code> - identyfikator samochodu jako duża litera</li>
                         <li><code>[start point]</code> - punkt znajdujący się najblizej w pionie i poziomie do
                             punktu <code>(0, 0)</code></li>
                         <li><code>[direction]</code> - polozenie samochodu wartosci <code>V</code> albo
@@ -70,9 +70,19 @@
                 <div class="panel-heading">Wyjściowe dane</div>
                 <div class="panel-body">
                     Dla każdego przypadku testowego należy wyświetlić w jednej lini liczbę <code>n</code> kroków
-                    oraz <code>n</code> linii ruchów samochodów po planszy. Liczba kroków oraz kroki powinny
-                    zostać
-                    przekazana na standardowe wyjście.
+                    oraz <code>n</code> linii ruchów samochodów po planszy w postaci
+
+                    <pre><code>[id] [move direction] [distance]</code></pre>
+
+                    <ul>
+                        <li><code>[id]</code> - identyfikator samochodu</li>
+                        <li><code>[move direction]</code> - kierunek ruchu samochodu (<code>U</code> - do góry,
+                            <code>R</code> - w prawo, <code>D</code> - na dół, <code>L</code> - w lewo)
+                        </li>
+                        <li><code>[distance]</code> - odległość, na którą należy przesunąć samochód</li>
+                    </ul>
+
+                    Liczba kroków oraz kroki powinny zostać przekazana na standardowe wyjście.
                 </div>
             </div>
 
@@ -111,7 +121,8 @@ X R 4
                     W przypadku Java, należy przysłać plik, zawierający klasę <code>Main</code> z metodą
                     <code>void main(String[])</code>.
                     <br>
-                    Dla rozwiązań w C++ jest używany kompilator GCC wersji 5.3.1 z włączoną flagą <code>-std=c++11</code>
+                    Dla rozwiązań w C++ jest używany kompilator GCC wersji 5.3.1 z włączoną flagą
+                    <code>-std=c++11</code>
                 </div>
             </div>
         </div>
@@ -122,7 +133,8 @@ X R 4
                 <div class="panel-body">
                     <form action="/submit" method="post" enctype="multipart/form-data">
                         <div class="form-group">
-                            <input type="text" name="author" placeholder="Your name" class="form-control" required="required" minlength="5" />
+                            <input type="text" name="author" placeholder="Your name" class="form-control"
+                                   required="required" minlength="5"/>
                         </div>
 
                         <div class="form-group">
