@@ -25,7 +25,7 @@ public class Solution {
 
     protected SolutionStatus status;
 
-    @OneToMany
+    @OneToMany(targetEntity = SolutionResult.class, mappedBy = "solution", fetch = FetchType.EAGER)
     protected List<SolutionResult> results;
 
     @Column(updatable = false)
@@ -116,5 +116,13 @@ public class Solution {
             return "Errors while running occured";
 
         return "Unknown O_o";
+    }
+
+    public List<SolutionResult> getResults() {
+        return results;
+    }
+
+    public void setResults(List<SolutionResult> results) {
+        this.results = results;
     }
 }

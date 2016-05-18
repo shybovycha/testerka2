@@ -1,14 +1,21 @@
 package checker.runners;
 
 import checker.entities.Solution;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 
+import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
 /**
  * Created by shybovycha on 12/05/16.
  */
+@PropertySource("classpath:application.properties")
 public abstract class SolutionRunner {
+    @Value("${runner.timeout}")
+    private int runTimeout;
+
     public boolean accepts(Solution solution) {
         return this.getAcceptedLanguage().equals(solution.getLanguage());
     }
@@ -27,21 +34,34 @@ public abstract class SolutionRunner {
         Scanner stderrScanner = new Scanner(process.getErrorStream());
         PrintWriter writer = new PrintWriter(process.getOutputStream());
 
-        writer.write("1\n"); // FIXME: number of test cases
+        RunnerWorker worker = new RunnerWorker(process);
+        worker.start();
 
-        writer.write(input);
-        writer.close();
+        try {
+            worker.join(runTimeout);
 
-        while (stdoutScanner.hasNextLine()) {
-            output.append(stdoutScanner.nextLine()).append("\n");
+            writer.write("1\n"); // FIXME: number of test cases
+
+            writer.write(input);
+            writer.close();
+
+            while (stdoutScanner.hasNextLine()) {
+                output.append(stdoutScanner.nextLine()).append("\n");
+            }
+
+            while (stderrScanner.hasNextLine()) {
+                errors.append(stderrScanner.nextLine()).append("\n");
+            }
+
+            if (errors.length() > 0)
+                throw new Exception(String.format("RUNTIME ERRORS (solution #%d): %s", solution.getId(), errors.toString()));
+        } catch (InterruptedException e) {
+            worker.interrupt();
+            Thread.currentThread().interrupt();
+            throw e;
+        } finally {
+            process.destroy();
         }
-
-        while (stderrScanner.hasNextLine()) {
-            errors.append(stderrScanner.nextLine()).append("\n");
-        }
-
-        if (errors.length() > 0)
-            throw new Exception(String.format("RUNTIME ERRORS (solution #%d): %s", solution.getId(), errors.toString()));
 
         return output.toString();
     }
@@ -50,7 +70,24 @@ public abstract class SolutionRunner {
 
     protected abstract String getAcceptedLanguage();
 
+    protected abstract String getDescription();
+
     protected String getSolutionDir(Solution solution) {
         return String.format("solutions/%d", solution.getId());
+    }
+
+    protected void writeSolutionToFile(Solution solution, String filename) {
+        try {
+            new File(this.getSolutionDir(solution)).mkdirs();
+
+            File f = new File(filename);
+            PrintWriter writer = new PrintWriter(f);
+
+            writer.write(solution.getSource());
+
+            writer.close();
+        } catch (Exception e) {
+            // TODO: logger
+        }
     }
 }

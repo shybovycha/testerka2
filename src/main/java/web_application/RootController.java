@@ -2,6 +2,7 @@ package web_application;
 
 import checker.entities.Solution;
 import checker.repositories.SolutionRepository;
+import checker.runners.SolutionRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 @EnableAutoConfiguration
@@ -28,9 +30,13 @@ public class RootController {
     @Autowired
     SolutionRepository solutionRepository;
 
+    @Autowired
+    List<SolutionRunner> availableRunners;
+
     @RequestMapping("/")
     String home(Model model) {
         model.addAttribute("solution", new Solution());
+        model.addAttribute("runners", availableRunners);
 
         return "index";
     }

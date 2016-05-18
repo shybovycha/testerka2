@@ -14,10 +14,23 @@ public class SolutionResult {
     @OneToOne
     private TestCase testCase;
 
+    @Lob
+    private String output;
+
+    private Integer points;
+
     @OneToOne
     private Solution solution;
 
     private boolean passed;
+
+    public SolutionResult() {}
+
+    public SolutionResult(Solution solution, TestCase testCase) {
+        this.solution = solution;
+        this.testCase = testCase;
+        this.passed = false;
+    }
 
     public SolutionResult(Solution solution, TestCase testCase, boolean passed) {
         this.solution = solution;
@@ -47,5 +60,21 @@ public class SolutionResult {
 
     public void setPassed(boolean passed) {
         this.passed = passed;
+    }
+
+    public Integer getPoints() {
+        return points;
+    }
+
+    public void setPoints(Integer points) {
+        this.points = points;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
     }
 }

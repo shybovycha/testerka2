@@ -114,10 +114,10 @@ X R 4
                     System działa w operacyjnym systemie Linux.
                     Na razie z dostępnych języków są:
                     <ul>
-                        <li>Oracle Java 1.8</li>
-                        <li>GNU C++</li>
+                        {{#runners}}
+                            <li>{{getDescription}}</li>
+                        {{/runners}}
                     </ul>
-                    <br>
                     W przypadku Java, należy przysłać plik, zawierający klasę <code>Main</code> z metodą
                     <code>void main(String[])</code>.
                     <br>
@@ -139,8 +139,9 @@ X R 4
 
                         <div class="form-group">
                             <select class="form-control" name="language">
-                                <option value="java">java 1.8</option>
-                                <option value="cpp">c++ (GCC)</option>
+                                {{#runners}}
+                                    <option value="{{getAcceptedLanguage}}">{{getDescription}}</option>
+                                {{/runners}}
                             </select>
                         </div>
 

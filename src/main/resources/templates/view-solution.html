@@ -9,11 +9,39 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-xs-12">
-            <strong>Status:</strong> {{#solution}}{{{getStatusString}}}{{/solution}}
-        </div>
-    </div>
+    {{#solution}}
+        <h1>Status: {{{getStatusString}}}</h1>
+
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Input</th>
+                    <th>Output</th>
+                    <th>Points</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {{#getResults}}
+                <tr>
+                    <td>
+                        {{#getTestCase}}
+                        <pre>{{{getInput}}}</pre>
+                        {{/getTestCase}}
+                    </td>
+
+                    <td>
+                        <pre>{{{getOutput}}}</pre>
+                    </td>
+
+                    <td>
+                        {{getPoints}}
+                    </td>
+                </tr>
+                {{/getResults}}
+            </tbody>
+        </table>
+    {{/solution}}
 </div>
 </body>
 </html>

@@ -4,7 +4,6 @@ import checker.entities.Solution;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.PrintWriter;
 
 /**
  * Created by shybovycha on 12/05/16.
@@ -18,18 +17,7 @@ public class JavaSolutionRunner extends CompiledSolutionRunner {
         String sourceFileName = "Main.java";
         String sourceFilePath = String.format("%s/%s", this.getSolutionDir(solution), sourceFileName);
 
-        try {
-            new File(this.getSolutionDir(solution)).mkdirs();
-
-            File f = new File(sourceFilePath);
-            PrintWriter writer = new PrintWriter(f);
-
-            writer.write(solution.getSource().replaceFirst("\\bpackage\\s+\\w+;", ""));
-
-            writer.close();
-        } catch (Exception e) {
-            // TODO: logger
-        }
+        writeSolutionToFile(solution, sourceFilePath);
 
         ProcessBuilder pb = new ProcessBuilder("javac", "-source", "1.8", "-target", "1.8", sourceFileName);
         pb.directory(new File(this.getSolutionDir(solution)));
@@ -48,5 +36,10 @@ public class JavaSolutionRunner extends CompiledSolutionRunner {
     @Override
     protected String getAcceptedLanguage() {
         return "java";
+    }
+
+    @Override
+    protected String getDescription() {
+        return "Java (Oracle)";
     }
 }

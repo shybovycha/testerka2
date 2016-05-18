@@ -341,8 +341,7 @@ public class SolutionChecker {
 
         try {
             for (TestCase testCase : testCaseEntities) {
-                boolean passed = checkSingleTest(runner.get(), solution, testCase);
-                SolutionResult result = new SolutionResult(solution, testCase, passed);
+                SolutionResult result = checkSingleTest(runner.get(), solution, testCase);
                 results.add(result);
             }
         } catch (Exception e) {
@@ -355,7 +354,11 @@ public class SolutionChecker {
             return;
         }
 
-        results.stream().forEach(result -> solutionResultRepository.save(result));
+        //results.stream().forEach(result -> solutionResultRepository.save(result));
+        solutionResultRepository.save(results);
+
+        solution.setResults(results);
+        solutionRepository.save(solution);
 
         if (results.stream().allMatch(SolutionResult::isPassed)) {
             solution.setStatus(Solution.SolutionStatus.PASSED_CORRECT);
@@ -368,20 +371,28 @@ public class SolutionChecker {
         solutionRepository.save(solution);
     }
 
-    public boolean checkSingleTest(SolutionRunner runner, Solution solution, checker.entities.TestCase testCase) throws Exception {
+    public SolutionResult checkSingleTest(SolutionRunner runner, Solution solution, TestCase testCase) throws Exception {
+        SolutionResult result = new SolutionResult(solution, testCase);
+
         String output = runner.getOutputFor(solution, testCase.getInput());
+
+        result.setOutput(output);
 
         Field field = new FieldParser().parseField(testCase.getInput());
 
         List<Move> moves = new MoveParser(field).parseAll(output);
 
+        result.setPoints(moves.size());
+
         for (Move move : moves) {
             if (!field.isMoveValid(move))
-                return false;
+                break;
 
             field = field.applyMove(move);
         }
 
-        return field.isSolved();
+        result.setPassed(field.isSolved());
+
+        return result;
     }
 }
