@@ -1,6 +1,7 @@
 package web_application;
 
 import checker.entities.Solution;
+import checker.entities.SolutionResult;
 import checker.repositories.SolutionRepository;
 import checker.runners.SolutionRunner;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @EnableAutoConfiguration
 @EnableJpaRepositories("checker.repositories")
@@ -35,6 +38,20 @@ public class RootController {
 
     @RequestMapping("/")
     String home(Model model) {
+        List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
+                .filter(s -> s.getStatus() == Solution.SolutionStatus.PASSED_CORRECT)
+                .sorted((s1, s2) ->
+                        Integer.compare(
+                                s1.getResults().stream()
+                                        .map(SolutionResult::getPoints)
+                                        .collect(Collectors.summingInt(Integer::intValue)),
+                                s2.getResults().stream()
+                                        .map(SolutionResult::getPoints)
+                                        .collect(Collectors.summingInt(Integer::intValue))))
+                .collect(Collectors.toList());
+
+        model.addAttribute("allSolutions", solutions);
+
         model.addAttribute("solution", new Solution());
         model.addAttribute("runners", availableRunners);
 
@@ -52,8 +69,8 @@ public class RootController {
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     String submitSolution(@RequestParam("source") MultipartFile sourceFile,
-                                @RequestParam() String language,
-                                @RequestParam("author") String author) {
+                          @RequestParam() String language,
+                          @RequestParam("author") String author) {
         Solution solution = new Solution();
 
         if (!sourceFile.isEmpty()) {
@@ -79,6 +96,25 @@ public class RootController {
         solutionRepository.save(solution);
 
         return String.format("redirect:/solution/%d", solution.getId());
+    }
+
+    @RequestMapping("/ranking")
+    String ranking(Model model) {
+        List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
+                .filter(s -> s.getStatus() == Solution.SolutionStatus.PASSED_CORRECT)
+                .sorted((s1, s2) ->
+                        Integer.compare(
+                                s1.getResults().stream()
+                                        .map(SolutionResult::getPoints)
+                                        .collect(Collectors.summingInt(Integer::intValue)),
+                                s2.getResults().stream()
+                                        .map(SolutionResult::getPoints)
+                                        .collect(Collectors.summingInt(Integer::intValue))))
+                .collect(Collectors.toList());
+
+        model.addAttribute("solutions", solutions);
+
+        return "ranking";
     }
 
     public static void main(String[] args) throws Exception {

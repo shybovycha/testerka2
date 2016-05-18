@@ -115,7 +115,7 @@ X R 4
                     Na razie z dostępnych języków są:
                     <ul>
                         {{#runners}}
-                            <li>{{getDescription}}</li>
+                        <li>{{getDescription}}</li>
                         {{/runners}}
                     </ul>
                     W przypadku Java, należy przysłać plik, zawierający klasę <code>Main</code> z metodą
@@ -128,33 +128,79 @@ X R 4
         </div>
 
         <div class="col-xs-6">
-            <div class="panel panel-warning">
-                <div class="panel-heading">Wysłanie zadania</div>
-                <div class="panel-body">
-                    <form action="/submit" method="post" enctype="multipart/form-data">
-                        <div class="form-group">
-                            <input type="text" name="author" placeholder="Your name" class="form-control"
-                                   required="required" minlength="5"/>
-                        </div>
-
-                        <div class="form-group">
-                            <select class="form-control" name="language">
-                                {{#runners}}
-                                    <option value="{{getAcceptedLanguage}}">{{getDescription}}</option>
-                                {{/runners}}
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <input type="file" placeholder="Your name" name="source"/>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-xs-12 text-center">
-                                <button type="submit" class="btn btn-primary">Submit</button>
+            <div class="row">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">Wysłanie zadania</div>
+                    <div class="panel-body">
+                        <form action="/submit" method="post" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <input type="text" name="author" placeholder="Your name" class="form-control"
+                                       required="required" minlength="5"/>
                             </div>
+
+                            <div class="form-group">
+                                <select class="form-control" name="language">
+                                    {{#runners}}
+                                    <option value="{{getAcceptedLanguage}}">{{getDescription}}</option>
+                                    {{/runners}}
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="file" placeholder="Your name" name="source"/>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-xs-12 text-center">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="panel panel-info">
+                    <div class="panel-heading">Najlepsze wyniki</div>
+                    <div class="panel-body">
+                        <div class="alert alert-warning">
+                            <strong>Uwaga:</strong> niżej są wymienione tylko poprawne rozwiązania!
                         </div>
-                    </form>
+
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Author</th>
+                                    <th>Language</th>
+                                    <th>Submitted at</th>
+                                    <th>Moves</th>
+                                </tr>
+                                </thead>
+
+                            <tbody>
+                                {{#allSolutions}}
+                                <tr>
+                                    <td>
+                                        {{getAuthor}}
+                                    </td>
+
+                                    <td>
+                                        {{getLanguage}}
+                                    </td>
+
+                                    <td>
+                                        {{getCreatedAtStr}}
+                                    </td>
+
+                                    <td>
+                                        {{getPoints}}
+                                    </td>
+                                </tr>
+                                {{/allSolutions}}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

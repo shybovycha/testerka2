@@ -1,8 +1,10 @@
 package checker.entities;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by shybovycha on 10/05/16.
@@ -124,5 +126,18 @@ public class Solution {
 
     public void setResults(List<SolutionResult> results) {
         this.results = results;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public String getCreatedAtStr() {
+        SimpleDateFormat fmt = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+        return fmt.format(createdAt);
+    }
+
+    public Integer getPoints() {
+        return this.getResults().stream().map(SolutionResult::getPoints).collect(Collectors.summingInt(Integer::intValue));
     }
 }
