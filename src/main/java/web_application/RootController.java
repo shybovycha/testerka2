@@ -1,9 +1,9 @@
 package web_application;
 
-import checker.entities.Solution;
-import checker.entities.SolutionResult;
-import checker.repositories.SolutionRepository;
-import checker.runners.SolutionRunner;
+import core.entities.Solution;
+import core.entities.SolutionResult;
+import core.repositories.SolutionRepository;
+import core.checker.SolutionRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @EnableAutoConfiguration
-@EnableJpaRepositories("checker.repositories")
-@EntityScan("checker.entities")
-@ComponentScan("checker")
+@EnableJpaRepositories("core.repositories")
+@EntityScan("core.entities")
+@ComponentScan(basePackages = {"core"})
 @Controller
 public class RootController {
     @Autowired

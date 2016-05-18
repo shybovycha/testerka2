@@ -1,6 +1,6 @@
-package checker.runners;
+package core.checker;
 
-import checker.entities.Solution;
+import core.entities.Solution;
 
 import java.util.Scanner;
 

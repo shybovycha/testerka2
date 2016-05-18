@@ -1,6 +1,6 @@
-package checker.runners;
+package core.checker;
 
-import checker.entities.Solution;
+import core.entities.Solution;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.PropertySource;
 
@@ -80,7 +80,7 @@ public abstract class SolutionRunner {
         try {
             new File(this.getSolutionDir(solution)).mkdirs();
 
-            File f = new File(filename);
+            File f = new File(String.format("%s/%s", this.getSolutionDir(solution), filename));
             PrintWriter writer = new PrintWriter(f);
 
             writer.write(solution.getSource());

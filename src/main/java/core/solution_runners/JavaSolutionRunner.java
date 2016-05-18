@@ -1,6 +1,7 @@
-package checker.runners;
+package core.solution_runners;
 
-import checker.entities.Solution;
+import core.entities.Solution;
+import core.checker.CompiledSolutionRunner;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -15,9 +16,10 @@ public class JavaSolutionRunner extends CompiledSolutionRunner {
     @Override
     protected ProcessBuilder getCompilerProcessBuilder(Solution solution) {
         String sourceFileName = "Main.java";
-        String sourceFilePath = String.format("%s/%s", this.getSolutionDir(solution), sourceFileName);
 
-        writeSolutionToFile(solution, sourceFilePath);
+        solution.setSource(solution.getSource().replaceFirst("\\bpackage\\s+\\w+;", ""));
+
+        writeSolutionToFile(solution, sourceFileName);
 
         ProcessBuilder pb = new ProcessBuilder("javac", "-source", "1.8", "-target", "1.8", sourceFileName);
         pb.directory(new File(this.getSolutionDir(solution)));

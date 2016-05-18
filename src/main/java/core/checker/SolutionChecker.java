@@ -1,12 +1,11 @@
-package checker;
+package core.checker;
 
-import checker.entities.Solution;
-import checker.entities.SolutionResult;
-import checker.entities.TestCase;
-import checker.repositories.SolutionRepository;
-import checker.repositories.SolutionResultRepository;
-import checker.repositories.TestCaseRepository;
-import checker.runners.SolutionRunner;
+import core.entities.Solution;
+import core.entities.SolutionResult;
+import core.entities.TestCase;
+import core.repositories.SolutionRepository;
+import core.repositories.SolutionResultRepository;
+import core.repositories.TestCaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

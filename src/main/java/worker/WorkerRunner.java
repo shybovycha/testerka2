@@ -1,9 +1,9 @@
 package worker;
 
-import checker.SolutionChecker;
-import checker.entities.Solution;
-import checker.repositories.SolutionRepository;
-import checker.repositories.SolutionResultRepository;
+import core.checker.SolutionChecker;
+import core.entities.Solution;
+import core.repositories.SolutionRepository;
+import core.repositories.SolutionResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -24,10 +24,10 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Component
 @EnableScheduling
-@EnableJpaRepositories("checker.repositories")
-@EntityScan("checker.entities")
+@EnableJpaRepositories("core.repositories")
+@EntityScan("core.entities")
 @EnableAutoConfiguration
-@ComponentScan("checker")
+@ComponentScan(basePackages = { "core" })
 @SpringBootApplication(exclude = { EmbeddedServletContainerAutoConfiguration.class, WebMvcAutoConfiguration.class })
 public class WorkerRunner {
     @Autowired

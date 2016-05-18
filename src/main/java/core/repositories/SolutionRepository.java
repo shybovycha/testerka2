@@ -1,6 +1,6 @@
-package checker.repositories;
+package core.repositories;
 
-import checker.entities.Solution;
+import core.entities.Solution;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

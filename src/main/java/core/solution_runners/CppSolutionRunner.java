@@ -1,6 +1,7 @@
-package checker.runners;
+package core.solution_runners;
 
-import checker.entities.Solution;
+import core.entities.Solution;
+import core.checker.CompiledSolutionRunner;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -16,9 +17,8 @@ public class CppSolutionRunner extends CompiledSolutionRunner {
     @Override
     protected ProcessBuilder getCompilerProcessBuilder(Solution solution) {
         String sourceFileName = "main.cpp";
-        String sourceFilePath = String.format("%s/%s", this.getSolutionDir(solution), sourceFileName);
 
-        writeSolutionToFile(solution, sourceFilePath);
+        writeSolutionToFile(solution, sourceFileName);
 
         ProcessBuilder pb = new ProcessBuilder("g++", "-o", "main", sourceFileName, "-std=c++11");
         pb.directory(new File(this.getSolutionDir(solution)));

@@ -1,6 +1,6 @@
-package checker.repositories;
+package core.repositories;
 
-import checker.entities.TestCase;
+import core.entities.TestCase;
 import org.springframework.data.repository.CrudRepository;
 
 /**

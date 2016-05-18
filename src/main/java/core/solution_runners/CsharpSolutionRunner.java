@@ -1,6 +1,7 @@
-package checker.runners;
+package core.solution_runners;
 
-import checker.entities.Solution;
+import core.entities.Solution;
+import core.checker.CompiledSolutionRunner;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -15,9 +16,8 @@ public class CsharpSolutionRunner extends CompiledSolutionRunner {
     @Override
     protected ProcessBuilder getCompilerProcessBuilder(Solution solution) {
         String sourceFileName = "Main.cs";
-        String sourceFilePath = String.format("%s/%s", this.getSolutionDir(solution), sourceFileName);
 
-        writeSolutionToFile(solution, sourceFilePath);
+        writeSolutionToFile(solution, sourceFileName);
 
         ProcessBuilder pb = new ProcessBuilder("mcs", "-o", "main", sourceFileName);
         pb.directory(new File(this.getSolutionDir(solution)));

@@ -1,4 +1,4 @@
-package checker.entities;
+package core.entities;
 
 import javax.persistence.*;
 

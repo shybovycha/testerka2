@@ -1,4 +1,4 @@
-package checker.runners;
+package core.checker;
 
 /**
  * Created by shybovycha on 18/05/16.
