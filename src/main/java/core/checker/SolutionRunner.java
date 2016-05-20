@@ -2,7 +2,6 @@ package core.checker;
 
 import core.entities.Solution;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.PropertySource;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -11,7 +10,6 @@ import java.util.Scanner;
 /**
  * Created by shybovycha on 12/05/16.
  */
-@PropertySource("classpath:application.properties")
 public abstract class SolutionRunner {
     @Value("${runner.timeout}")
     private int runTimeout;
