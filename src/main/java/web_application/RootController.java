@@ -1,9 +1,9 @@
 package web_application;
 
+import core.checker.SolutionRunner;
 import core.entities.Solution;
 import core.entities.SolutionResult;
 import core.repositories.SolutionRepository;
-import core.checker.SolutionRunner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -48,6 +48,7 @@ public class RootController {
                                 s2.getResults().stream()
                                         .map(SolutionResult::getPoints)
                                         .collect(Collectors.summingInt(Integer::intValue))))
+                .sorted((s1, s2) -> Long.compare(s2.getCreatedAt().getTime(), s1.getCreatedAt().getTime()))
                 .collect(Collectors.toList());
 
         model.addAttribute("allSolutions", solutions);
