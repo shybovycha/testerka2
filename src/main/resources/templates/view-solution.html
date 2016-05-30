@@ -21,17 +21,17 @@
         </div>
         {{/getErrorMessage}}
 
-        {{#getResults}}
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th>Wejście</th>
                     <th>Wyjście</th>
-                    <th>Kroki</th>
+                    <th>Poprawność</th>
                 </tr>
             </thead>
 
             <tbody>
+                {{#getResults}}
                 <tr>
                     <td>
                         {{#getTestCase}}
@@ -44,12 +44,12 @@
                     </td>
 
                     <td>
-                        {{getPoints}}
+                        {{getPassedString}}
                     </td>
                 </tr>
+                {{/getResults}}
             </tbody>
         </table>
-        {{/getResults}}
     {{/solution}}
 </div>
 </body>
