@@ -17,7 +17,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  * Created by shybovycha on 10/05/16.
@@ -39,10 +40,9 @@ public class WorkerRunner {
     @Autowired
     SolutionChecker checker;
 
-    @Transactional
     @Scheduled(fixedRate = 5000)
     public void checkForPendingSolutions() {
-        Iterable<Solution> pendingSolutions = solutionRepository.findByStatus(Solution.SolutionStatus.PENDING);
+        List<Solution> pendingSolutions = (List<Solution>) solutionRepository.findByStatus(Solution.SolutionStatus.PENDING);
 
         for (Solution solution : pendingSolutions) {
             solution.setStatus(Solution.SolutionStatus.CHECKING);
