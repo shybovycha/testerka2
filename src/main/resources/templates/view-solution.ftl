@@ -42,7 +42,11 @@
                 </td>
 
                 <td>
-                    ${result.passedString}
+                    <#if result.passed>
+                        <i class="glyphicon glyphicon-ok"></i>
+                    <#else>
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </#if>
                 </td>
             </tr>
             </#list>

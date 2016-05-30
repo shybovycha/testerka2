@@ -54,7 +54,7 @@ public class SolutionResult {
         this.solution = solution;
     }
 
-    public boolean isPassed() {
+    public boolean getPassed() {
         return passed;
     }
 
@@ -76,9 +76,5 @@ public class SolutionResult {
 
     public void setOutput(String output) {
         this.output = output;
-    }
-
-    public String getPassedString() {
-        return passed ? "PASSED" : "FAILED";
     }
 }

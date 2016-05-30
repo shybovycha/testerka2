@@ -324,7 +324,7 @@ public class SolutionChecker {
                 SolutionResult result = checkSingleTest(runner.get(), solution, testCase);
                 solutionResultRepository.save(result);
 
-                System.out.printf(">>> TEST CASE #%d: %s\n", testCase.getId(), result.isPassed() ? "PASSED" : "FAILED");
+                System.out.printf(">>> TEST CASE #%d: %s\n", testCase.getId(), result.getPassed() ? "PASSED" : "FAILED");
 
                 solution.getResults().add(result);
                 solutionRepository.save(solution);
@@ -345,7 +345,7 @@ public class SolutionChecker {
 
         // solution.setResults(results);
 
-        if (solution.getResults().stream().allMatch(SolutionResult::isPassed)) {
+        if (solution.getResults().stream().allMatch(SolutionResult::getPassed)) {
             solution.setStatus(Solution.SolutionStatus.PASSED_CORRECT);
         } else {
             solution.setStatus(Solution.SolutionStatus.PASSED_INCORRECT);
