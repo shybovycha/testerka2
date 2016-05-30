@@ -38,7 +38,7 @@
                 </td>
 
                 <td>
-                    <pre>${result.testCase.output!}</pre>
+                    <pre>${result.output!}</pre>
                 </td>
 
                 <td>
