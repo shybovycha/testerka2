@@ -101,28 +101,40 @@ class Field {
                 this.cars.stream().filter(c -> c.id != car.id).collect(Collectors.toList());
 
         if (car.dir == 'V') {
-            for (int py = car.pos.y; py > -1; --py) {
-                Point p = new Point(car.pos.x, py);
+            if (move.dir == 'U') {
+                for (int py = 0; py < move.d; ++py) {
+                    Point p = new Point(car.pos.x, car.pos.y + car.len + py);
 
-                if (otherCars.stream().anyMatch(c -> c.checkCollision(p))) return false;
-            }
+                    if (otherCars.stream().anyMatch(c -> c.checkCollision(p)))
+                        return false;
+                }
+            } else if (move.dir == 'D') {
+                for (int py = 0; py < move.d; ++py) {
+                    Point p = new Point(car.pos.x, car.pos.y - py);
 
-            for (int py = car.pos.y + car.len; py < 6; ++py) {
-                Point p = new Point(car.pos.x, py);
-
-                if (otherCars.stream().anyMatch(c -> c.checkCollision(p))) return false;
+                    if (otherCars.stream().anyMatch(c -> c.checkCollision(p)))
+                        return false;
+                }
+            } else {
+                return false;
             }
         } else {
-            for (int px = car.pos.x - 1; px > -1; --px) {
-                Point p = new Point(px, car.pos.y);
+            if (move.dir == 'R') {
+                for (int px = 0; px < move.d; ++px) {
+                    Point p = new Point(car.pos.x + car.len + px, car.pos.y);
 
-                if (otherCars.stream().anyMatch(c -> c.checkCollision(p))) return false;
-            }
+                    if (otherCars.stream().anyMatch(c -> c.checkCollision(p)))
+                        return false;
+                }
+            } else if (move.dir == 'L') {
+                for (int px = 0; px < move.d; ++px) {
+                    Point p = new Point(car.pos.x - px, car.pos.y);
 
-            for (int px = car.pos.x + car.len; px < 6; ++px) {
-                Point p = new Point(px, car.pos.y);
-
-                if (otherCars.stream().anyMatch(c -> c.checkCollision(p))) return false;
+                    if (otherCars.stream().anyMatch(c -> c.checkCollision(p)))
+                        return false;
+                }
+            } else {
+                return false;
             }
         }
 
@@ -339,11 +351,6 @@ public class SolutionChecker {
 
             return;
         }
-
-        // results.stream().forEach(result -> solutionResultRepository.save(result));
-        // solutionResultRepository.save(results);
-
-        // solution.setResults(results);
 
         if (solution.getResults().stream().allMatch(SolutionResult::getPassed)) {
             solution.setStatus(Solution.SolutionStatus.PASSED_CORRECT);
