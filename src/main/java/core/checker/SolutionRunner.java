@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.concurrent.*;
 
 /**
  * Created by shybovycha on 12/05/16.
@@ -13,6 +14,14 @@ import java.util.Scanner;
 public abstract class SolutionRunner {
     @Value("${runner.timeout}")
     private int runTimeout;
+
+    private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
+
+    private static <T> T timedCall(Callable<T> c, long timeout, TimeUnit timeUnit) throws InterruptedException, ExecutionException, TimeoutException {
+        FutureTask<T> task = new FutureTask<T>(c);
+        THREAD_POOL.execute(task);
+        return task.get(timeout, timeUnit);
+    }
 
     public boolean accepts(Solution solution) {
         return this.getAcceptedLanguage().equals(solution.getLanguage());
@@ -32,11 +41,8 @@ public abstract class SolutionRunner {
         Scanner stderrScanner = new Scanner(process.getErrorStream());
         PrintWriter writer = new PrintWriter(process.getOutputStream());
 
-        RunnerWorker worker = new RunnerWorker(process);
-        worker.start();
-
         try {
-            worker.join(runTimeout);
+            timedCall(process::waitFor, runTimeout, TimeUnit.MILLISECONDS);
 
             writer.write("1\n"); // FIXME: number of test cases
 
@@ -53,9 +59,9 @@ public abstract class SolutionRunner {
 
             if (errors.length() > 0)
                 throw new SolutionRuntimeException(errors.toString());
-        } catch (InterruptedException e) {
-            worker.interrupt();
+        } catch (TimeoutException e) {
             Thread.currentThread().interrupt();
+            System.out.printf(">>> SOLUTION TIMED OUT\n");
             throw e;
         } finally {
             process.destroy();
