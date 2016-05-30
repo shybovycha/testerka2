@@ -34,11 +34,11 @@
             <#list solution.results as result>
             <tr>
                 <td>
-                    <pre>${result.testCase.input?html}</pre>
+                    <pre>${result.testCase.input!?html}</pre>
                 </td>
 
                 <td>
-                    <pre>${result.testCase.output}</pre>
+                    <pre>${result.testCase.output!}</pre>
                 </td>
 
                 <td>
