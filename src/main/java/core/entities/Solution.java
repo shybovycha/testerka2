@@ -29,6 +29,7 @@ public class Solution {
 
     public enum SolutionStatus { PENDING, CHECKING, REJECTED, PASSED_CORRECT, PASSED_INCORRECT, RUN_ERROR };
 
+    @Enumerated(EnumType.STRING)
     protected SolutionStatus status;
 
     @OneToMany(targetEntity = SolutionResult.class, mappedBy = "solution", fetch = FetchType.EAGER)

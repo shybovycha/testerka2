@@ -299,7 +299,9 @@ public class SolutionChecker {
     public void check(Solution solution) {
         Optional<SolutionRunner> runner = runnersAvailable.stream().filter(r -> r.accepts(solution)).findFirst();
 
-        // Fixme: use logger
+        solution.setStatus(Solution.SolutionStatus.CHECKING);
+        solutionRepository.save(solution);
+
         System.out.printf(">> CHECKING SOLUTION %d\n", solution.getId());
 
         if (!runner.isPresent()) {
@@ -315,12 +317,17 @@ public class SolutionChecker {
 
         System.out.printf(">> RUNNING TEST CASES...\n");
 
-        List<SolutionResult> results = new ArrayList<>();
+        // List<SolutionResult> results = new ArrayList<>();
 
         try {
             for (TestCase testCase : testCaseEntities) {
                 SolutionResult result = checkSingleTest(runner.get(), solution, testCase);
-                results.add(result);
+                solutionResultRepository.save(result);
+
+                System.out.printf(">>> TEST CASE #%d: %s\n", testCase.getId(), result.isPassed() ? "PASSED" : "FAILED");
+
+                solution.getResults().add(result);
+                solutionRepository.save(solution);
             }
         } catch (Exception e) {
             solution.setStatus(Solution.SolutionStatus.RUN_ERROR);
@@ -333,12 +340,12 @@ public class SolutionChecker {
             return;
         }
 
-        //results.stream().forEach(result -> solutionResultRepository.save(result));
-        solutionResultRepository.save(results);
+        // results.stream().forEach(result -> solutionResultRepository.save(result));
+        // solutionResultRepository.save(results);
 
-        solution.setResults(results);
+        // solution.setResults(results);
 
-        if (results.stream().allMatch(SolutionResult::isPassed)) {
+        if (solution.getResults().stream().allMatch(SolutionResult::isPassed)) {
             solution.setStatus(Solution.SolutionStatus.PASSED_CORRECT);
         } else {
             solution.setStatus(Solution.SolutionStatus.PASSED_INCORRECT);
