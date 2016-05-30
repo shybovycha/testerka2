@@ -23,6 +23,7 @@ public class PointCalculator {
         List<SolutionResult> results = (List<SolutionResult>) solutionResultRepository.findAll();
 
         double avgPercent = results.stream()
+                .filter(r -> r.getSolution().getStatus() == Solution.SolutionStatus.PASSED_CORRECT)
                 .collect(Collectors.groupingBy(SolutionResult::getTestCase))
                 .entrySet().stream()
                 .mapToDouble(e -> {
@@ -30,9 +31,9 @@ public class PointCalculator {
                             .filter(r -> r.getTestCase().getId() == e.getKey().getId())
                             .findFirst().get().getPoints();
 
-                    int maxPoints = e.getValue().stream().mapToInt(SolutionResult::getPoints).max().getAsInt();
+                    int minPoints = e.getValue().stream().mapToInt(SolutionResult::getPoints).min().getAsInt();
 
-                    return (double) points / (double) maxPoints;
+                    return (double) minPoints / (double) points;
                 })
                 .average()
                 .getAsDouble();
