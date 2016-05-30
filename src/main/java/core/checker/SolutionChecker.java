@@ -337,7 +337,6 @@ public class SolutionChecker {
         solutionResultRepository.save(results);
 
         solution.setResults(results);
-        solutionRepository.save(solution);
 
         if (results.stream().allMatch(SolutionResult::isPassed)) {
             solution.setStatus(Solution.SolutionStatus.PASSED_CORRECT);
@@ -345,7 +344,7 @@ public class SolutionChecker {
             solution.setStatus(Solution.SolutionStatus.PASSED_INCORRECT);
         }
 
-        System.out.printf(">> DONE");
+        System.out.printf(">> DONE with status %d\n", solution.getStatus());
 
         solutionRepository.save(solution);
     }
