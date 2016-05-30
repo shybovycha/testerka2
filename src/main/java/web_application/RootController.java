@@ -105,25 +105,6 @@ public class RootController {
         return String.format("redirect:/solution/%d", solution.getId());
     }
 
-    @RequestMapping("/ranking")
-    String ranking(Model model) {
-        List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
-                .filter(s -> s.getStatus() == Solution.SolutionStatus.PASSED_CORRECT)
-                .sorted((s1, s2) ->
-                        Integer.compare(
-                                s1.getResults().stream()
-                                        .map(SolutionResult::getPoints)
-                                        .collect(Collectors.summingInt(Integer::intValue)),
-                                s2.getResults().stream()
-                                        .map(SolutionResult::getPoints)
-                                        .collect(Collectors.summingInt(Integer::intValue))))
-                .collect(Collectors.toList());
-
-        model.addAttribute("solutions", solutions);
-
-        return "ranking";
-    }
-
     public static void main(String[] args) throws Exception {
         SpringApplication.run(RootController.class, args);
     }

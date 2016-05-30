@@ -66,9 +66,9 @@ public abstract class SolutionRunner {
 
     protected abstract ProcessBuilder getRunProcessBuilder(Solution solution);
 
-    protected abstract String getAcceptedLanguage();
+    public abstract String getAcceptedLanguage();
 
-    protected abstract String getDescription();
+    public abstract String getDescription();
 
     protected String getSolutionDir(Solution solution) {
         return String.format("solutions/%d", solution.getId());

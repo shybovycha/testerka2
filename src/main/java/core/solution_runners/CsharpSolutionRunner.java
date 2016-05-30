@@ -34,12 +34,12 @@ public class CsharpSolutionRunner extends CompiledSolutionRunner {
     }
 
     @Override
-    protected String getAcceptedLanguage() {
+    public String getAcceptedLanguage() {
         return "csharp";
     }
 
     @Override
-    protected String getDescription() {
+    public String getDescription() {
         return "C# (Mono)";
     }
 }

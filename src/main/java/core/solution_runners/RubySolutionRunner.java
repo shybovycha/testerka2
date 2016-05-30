@@ -26,12 +26,12 @@ public class RubySolutionRunner extends SolutionRunner {
     }
 
     @Override
-    protected String getAcceptedLanguage() {
+    public String getAcceptedLanguage() {
         return "ruby";
     }
 
     @Override
-    protected String getDescription() {
+    public String getDescription() {
         return "Ruby";
     }
 }

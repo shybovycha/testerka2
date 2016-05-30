@@ -36,12 +36,12 @@ public class JavaSolutionRunner extends CompiledSolutionRunner {
     }
 
     @Override
-    protected String getAcceptedLanguage() {
+    public String getAcceptedLanguage() {
         return "java";
     }
 
     @Override
-    protected String getDescription() {
+    public String getDescription() {
         return "Java (Oracle)";
     }
 }

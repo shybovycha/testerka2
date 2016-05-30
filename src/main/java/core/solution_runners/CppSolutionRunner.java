@@ -35,12 +35,12 @@ public class CppSolutionRunner extends CompiledSolutionRunner {
     }
 
     @Override
-    protected String getAcceptedLanguage() {
+    public String getAcceptedLanguage() {
         return "cpp";
     }
 
     @Override
-    protected String getDescription() {
+    public String getDescription() {
         return "C++ (GCC)";
     }
 }

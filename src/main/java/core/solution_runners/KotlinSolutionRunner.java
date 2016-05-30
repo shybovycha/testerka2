@@ -35,12 +35,12 @@ public class KotlinSolutionRunner extends CompiledSolutionRunner {
     }
 
     @Override
-    protected String getAcceptedLanguage() {
+    public String getAcceptedLanguage() {
         return "kotlin";
     }
 
     @Override
-    protected String getDescription() {
+    public String getDescription() {
         return "Kotlin 1.0";
     }
 }

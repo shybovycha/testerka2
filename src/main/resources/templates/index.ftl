@@ -113,9 +113,9 @@ X R 4
                     System działa w operacyjnym systemie Linux.
                     Na razie z dostępnych języków są:
                     <ul>
-                        {{#runners}}
-                        <li>{{getDescription}}</li>
-                        {{/runners}}
+                        <#list runners as runner>
+                        <li>${runner.description}</li>
+                        </#list>
                     </ul>
                     W przypadku Java, należy przysłać plik, zawierający klasę <code>Main</code> z metodą
                     <code>void main(String[])</code>.
@@ -144,9 +144,9 @@ X R 4
 
                             <div class="form-group">
                                 <select class="form-control" name="language">
-                                    {{#runners}}
-                                    <option value="{{getAcceptedLanguage}}">{{getDescription}}</option>
-                                    {{/runners}}
+                                    <#list runners as runner>
+                                    <option value="${runner.acceptedLanguage}">${runner.description}</option>
+                                    </#list>
                                 </select>
                             </div>
 
@@ -183,25 +183,25 @@ X R 4
                             </thead>
 
                             <tbody>
-                            {{#allSolutions}}
+                            <#list allSolutions as solution>
                             <tr>
                                 <td>
-                                    {{getAuthor}}
+                                    ${solution.author}
                                 </td>
 
                                 <td>
-                                    {{getLanguage}}
+                                    ${solution.language}
                                 </td>
 
                                 <td>
-                                    <a href="/solution/{{getId}}">{{getCreatedAtStr}}</a>
+                                    <a href="/solution/${solution.id}">${solution.createdAtStr}</a>
                                 </td>
 
                                 <td>
-                                    {{getPoints}}
+                                    ${solution.points}
                                 </td>
                             </tr>
-                            {{/allSolutions}}
+                            </#list>
                             </tbody>
                         </table>
                     </div>

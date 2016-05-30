@@ -26,12 +26,12 @@ public class Python3SolutionRunner extends SolutionRunner {
     }
 
     @Override
-    protected String getAcceptedLanguage() {
+    public String getAcceptedLanguage() {
         return "python3";
     }
 
     @Override
-    protected String getDescription() {
+    public String getDescription() {
         return "Python 3";
     }
 }
