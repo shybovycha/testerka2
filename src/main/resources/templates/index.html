@@ -99,8 +99,7 @@ C 4 2 V 3
                                 </code></pre>
 
                     <h4>Wyjście</h4>
-                                <pre><code>
-3
+                                <pre><code>3
 A L 2
 C D 2
 X R 4
@@ -129,13 +128,18 @@ X R 4
 
         <div class="col-xs-6">
             <div class="row">
-                <div class="panel panel-warning">
-                    <div class="panel-heading">Wysłanie zadania</div>
+                <div class="panel panel-success">
+                    <div class="panel-heading">Wysłanie rozwiązania</div>
                     <div class="panel-body">
+                        <div class="alert alert-warning">
+                            Uprzejmie proszę o podanie swojego numeru indeksu w tym polu - wyniki będą dostarczone
+                            prowadzącemu zgodnie z poadnymi danymi.
+                        </div>
+
                         <form action="/submit" method="post" enctype="multipart/form-data">
                             <div class="form-group">
-                                <input type="text" name="author" placeholder="Your name" class="form-control"
-                                       required="required" minlength="5"/>
+                                <input type="text" name="author" placeholder="Nr. indeksu" class="form-control"
+                                       required="required" pattern="\d{7}" title="Numer indeksu" />
                             </div>
 
                             <div class="form-group">
@@ -147,12 +151,12 @@ X R 4
                             </div>
 
                             <div class="form-group">
-                                <input type="file" placeholder="Your name" name="source"/>
+                                <input type="file" name="source"/>
                             </div>
 
                             <div class="row">
                                 <div class="col-xs-12 text-center">
-                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                    <button type="submit" class="btn btn-primary">Wyślij</button>
                                 </div>
                             </div>
                         </form>
@@ -162,7 +166,7 @@ X R 4
 
             <div class="row">
                 <div class="panel panel-info">
-                    <div class="panel-heading">Najlepsze wyniki</div>
+                    <div class="panel-heading">Wyniki</div>
                     <div class="panel-body">
                         <div class="alert alert-warning">
                             <strong>Uwaga:</strong> niżej są wymienione tylko poprawne rozwiązania!
@@ -170,34 +174,34 @@ X R 4
 
                         <table class="table table-hover">
                             <thead>
-                                <tr>
-                                    <th>Author</th>
-                                    <th>Language</th>
-                                    <th>Submitted at</th>
-                                    <th>Moves</th>
-                                </tr>
-                                </thead>
+                            <tr>
+                                <th>Autor</th>
+                                <th>Język</th>
+                                <th>Odesłano</th>
+                                <th>Punkty (%)</th>
+                            </tr>
+                            </thead>
 
                             <tbody>
-                                {{#allSolutions}}
-                                <tr>
-                                    <td>
-                                        {{getAuthor}}
-                                    </td>
+                            {{#allSolutions}}
+                            <tr>
+                                <td>
+                                    {{getAuthor}}
+                                </td>
 
-                                    <td>
-                                        {{getLanguage}}
-                                    </td>
+                                <td>
+                                    {{getLanguage}}
+                                </td>
 
-                                    <td>
-                                        {{getCreatedAtStr}}
-                                    </td>
+                                <td>
+                                    <a href="/solution/{{getId}}">{{getCreatedAtStr}}</a>
+                                </td>
 
-                                    <td>
-                                        {{getPoints}}
-                                    </td>
-                                </tr>
-                                {{/allSolutions}}
+                                <td>
+                                    {{getPoints}}
+                                </td>
+                            </tr>
+                            {{/allSolutions}}
                             </tbody>
                         </table>
                     </div>

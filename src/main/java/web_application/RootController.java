@@ -1,5 +1,6 @@
 package web_application;
 
+import core.checker.PointCalculator;
 import core.checker.SolutionRunner;
 import core.entities.Solution;
 import core.entities.SolutionResult;
@@ -36,6 +37,9 @@ public class RootController {
     @Autowired
     List<SolutionRunner> availableRunners;
 
+    @Autowired
+    PointCalculator pointCalculator;
+
     @RequestMapping("/")
     String home(Model model) {
         List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
@@ -50,6 +54,8 @@ public class RootController {
                                         .collect(Collectors.summingInt(Integer::intValue))))
                 .sorted((s1, s2) -> Long.compare(s2.getCreatedAt().getTime(), s1.getCreatedAt().getTime()))
                 .collect(Collectors.toList());
+
+        solutions.stream().forEach(s -> s.setPoints(pointCalculator.getPointsFor(s)));
 
         model.addAttribute("allSolutions", solutions);
 

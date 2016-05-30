@@ -16,27 +16,6 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
-/**
- * Created by shybovycha on 10/05/16.
- */
-class InvalidFieldFormatException extends Exception {
-    public InvalidFieldFormatException(String fieldStr, String message) {
-        super(String.format("Invalid field format for string '%s'. %s", fieldStr, message));
-    }
-}
-
-class InvalidMoveFormatException extends Exception {
-    public InvalidMoveFormatException(String moveStr, String message) {
-        super(String.format("Invalid move format for string '%s'. %s", moveStr, message));
-    }
-}
-
-class InvalidCarFormatException extends Exception {
-    public InvalidCarFormatException(String carStr, String message) {
-        super(String.format("Invalid car format for string '%s'. %s", carStr, message));
-    }
-}
-
 class Car {
     public Point pos;
     public int len;
@@ -345,11 +324,12 @@ public class SolutionChecker {
             }
         } catch (Exception e) {
             solution.setStatus(Solution.SolutionStatus.RUN_ERROR);
+            solution.setErrorMessage(e.getMessage());
             solutionRepository.save(solution);
 
             e.printStackTrace();
-            System.out.printf(">> ERRORS DURING RUN.\n");
-            
+            System.out.printf(">> ERRORS DURING RUN: %s.\n", e.getMessage());
+
             return;
         }
 

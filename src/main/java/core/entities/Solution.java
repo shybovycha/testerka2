@@ -4,7 +4,6 @@ import javax.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Created by shybovycha on 10/05/16.
@@ -21,7 +20,12 @@ public class Solution {
     @Lob
     protected String source;
 
+    protected String errorMessage;
+
     protected String language;
+
+    @Transient
+    protected int points;
 
     public enum SolutionStatus { PENDING, CHECKING, REJECTED, PASSED_CORRECT, PASSED_INCORRECT, RUN_ERROR };
 
@@ -115,9 +119,17 @@ public class Solution {
             return "Incorrect";
 
         if (status == SolutionStatus.RUN_ERROR)
-            return "Errors while running occured";
+            return "Errors while running occurred";
 
         return "Unknown O_o";
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 
     public List<SolutionResult> getResults() {
@@ -137,7 +149,12 @@ public class Solution {
         return fmt.format(createdAt);
     }
 
+    public void setPoints(int value) {
+        this.points = value;
+    }
+
     public Integer getPoints() {
-        return this.getResults().stream().map(SolutionResult::getPoints).collect(Collectors.summingInt(Integer::intValue));
+        // return this.getResults().stream().map(SolutionResult::getPoints).collect(Collectors.summingInt(Integer::intValue));
+        return this.points;
     }
 }

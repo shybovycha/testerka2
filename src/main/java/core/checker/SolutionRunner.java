@@ -52,7 +52,7 @@ public abstract class SolutionRunner {
             }
 
             if (errors.length() > 0)
-                throw new Exception(String.format("RUNTIME ERRORS (solution #%d): %s", solution.getId(), errors.toString()));
+                throw new SolutionRuntimeException(errors.toString());
         } catch (InterruptedException e) {
             worker.interrupt();
             Thread.currentThread().interrupt();
@@ -86,6 +86,7 @@ public abstract class SolutionRunner {
             writer.close();
         } catch (Exception e) {
             // TODO: logger
+            e.printStackTrace();
         }
     }
 }

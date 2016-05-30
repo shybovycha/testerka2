@@ -12,17 +12,26 @@
     {{#solution}}
         <h1>Status: {{{getStatusString}}}</h1>
 
+        {{#getErrorMessage}}
+        <div class="panel panel-error">
+            <div class="panel-heading">Odpowiedź systemu</div>
+            <div class="panel-body">
+                {{{getErrorMessage}}}
+            </div>
+        </div>
+        {{/getErrorMessage}}
+
+        {{#getResults}}
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th>Input</th>
-                    <th>Output</th>
-                    <th>Moves</th>
+                    <th>Wejście</th>
+                    <th>Wyjście</th>
+                    <th>Kroki</th>
                 </tr>
             </thead>
 
             <tbody>
-                {{#getResults}}
                 <tr>
                     <td>
                         {{#getTestCase}}
@@ -38,9 +47,9 @@
                         {{getPoints}}
                     </td>
                 </tr>
-                {{/getResults}}
             </tbody>
         </table>
+        {{/getResults}}
     {{/solution}}
 </div>
 </body>

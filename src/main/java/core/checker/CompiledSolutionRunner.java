@@ -27,7 +27,7 @@ public abstract class CompiledSolutionRunner extends SolutionRunner {
         }
 
         if (errors.length() > 0) {
-            throw new Exception(String.format("COMPILATION ERRORS (solution #%d): %s", solution.getId(), errors.toString()));
+            throw new SolutionCompilationException(errors.toString());
         }
     }
 

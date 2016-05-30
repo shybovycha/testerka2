@@ -23,4 +23,8 @@ public class TestCase {
     public String getInput() {
         return this.input;
     }
+
+    public long getId() {
+        return id;
+    }
 }
