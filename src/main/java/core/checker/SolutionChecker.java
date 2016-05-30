@@ -344,7 +344,7 @@ public class SolutionChecker {
             solution.setStatus(Solution.SolutionStatus.PASSED_INCORRECT);
         }
 
-        System.out.printf(">> DONE with status %d\n", solution.getStatus());
+        System.out.printf(">> DONE with status %s\n", solution.getStatusString());
 
         solutionRepository.save(solution);
     }
