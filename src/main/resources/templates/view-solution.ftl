@@ -38,7 +38,7 @@
                 </td>
 
                 <td>
-                    <pre>${result.output!"<EMPTY>"}</pre>
+                    <pre>${result.output!"<EMPTY>"?html}</pre>
                 </td>
 
                 <td>
