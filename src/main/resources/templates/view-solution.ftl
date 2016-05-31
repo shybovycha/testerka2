@@ -38,7 +38,7 @@
                 </td>
 
                 <td>
-                    <pre><#if result.output?matches("^\\s*$")>${"<EMPTY>"?html}<#else>${result.output?html}</#if></pre>
+                    <pre><#if !result.output?exists || result.output?matches("^\\s*$")>${"<EMPTY>"?html}<#else>${result.output?html}</#if></pre>
                 </td>
 
                 <td>
