@@ -345,6 +345,9 @@ public class SolutionChecker {
                     System.out.printf(">>> TEST CASE #%d: %s\n", testCase.getId(), result.getPassed() ? "PASSED" : "FAILED");
                 } catch (TimeoutException e) {
                     e.printStackTrace();
+                    result.setOutput("<TIMEOUT>");
+
+                    System.out.printf(">>> TEST CASE #%d TIMED OUT\n", testCase.getId());
                 } finally {
                     solution.getResults().add(result);
                     solutionRepository.save(solution);
