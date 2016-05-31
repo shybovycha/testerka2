@@ -335,12 +335,10 @@ public class SolutionChecker {
         try {
             for (TestCase testCase : testCaseEntities) {
                 SolutionResult result = new SolutionResult(solution, testCase, false);
-                solutionResultRepository.save(result);
 
                 // we can go on even if one test case was timed out
                 try {
                     result = checkSingleTest(runner.get(), solution, testCase);
-                    solutionResultRepository.save(result);
 
                     System.out.printf(">>> TEST CASE #%d: %s\n", testCase.getId(), result.getPassed() ? "PASSED" : "FAILED");
                 } catch (TimeoutException e) {
@@ -349,6 +347,8 @@ public class SolutionChecker {
 
                     System.out.printf(">>> TEST CASE #%d TIMED OUT\n", testCase.getId());
                 } finally {
+                    solutionResultRepository.save(result);
+
                     solution.getResults().add(result);
                     solutionRepository.save(solution);
                 }
