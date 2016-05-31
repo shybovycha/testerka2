@@ -12,7 +12,7 @@
     <h1>Status: ${solution.statusString?html}</h1>
 
     <#if solution.errorMessage?exists>
-        <div class="panel panel-error">
+        <div class="panel panel-danger">
             <div class="panel-heading">Odpowiedź systemu</div>
             <div class="panel-body">
                 ${solution.errorMessage}
