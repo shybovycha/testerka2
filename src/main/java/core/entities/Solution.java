@@ -20,6 +20,7 @@ public class Solution {
     @Lob
     protected String source;
 
+    @Lob
     protected String errorMessage;
 
     protected String language;
