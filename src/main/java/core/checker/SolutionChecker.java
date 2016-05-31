@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
 
 class Car {
@@ -333,15 +334,26 @@ public class SolutionChecker {
 
         try {
             for (TestCase testCase : testCaseEntities) {
-                SolutionResult result = checkSingleTest(runner.get(), solution, testCase);
-                solutionResultRepository.save(result);
+                SolutionResult result = new SolutionResult(solution, testCase, false);
 
-                System.out.printf(">>> TEST CASE #%d: %s\n", testCase.getId(), result.getPassed() ? "PASSED" : "FAILED");
+                // we can go on even if one test case was timed out
+                try {
+                    result = checkSingleTest(runner.get(), solution, testCase);
+                    solutionResultRepository.save(result);
 
-                solution.getResults().add(result);
-                solutionRepository.save(solution);
+                    System.out.printf(">>> TEST CASE #%d: %s\n", testCase.getId(), result.getPassed() ? "PASSED" : "FAILED");
+
+                    solution.getResults().add(result);
+                    solutionRepository.save(solution);
+                } catch (TimeoutException e) {
+                    e.printStackTrace();
+                } finally {
+                    solution.getResults().add(result);
+                    solutionRepository.save(solution);
+                }
             }
         } catch (Exception e) {
+            // but for more critical errors we stop checker
             solution.setStatus(Solution.SolutionStatus.RUN_ERROR);
             solution.setErrorMessage(e.getMessage());
             solutionRepository.save(solution);
