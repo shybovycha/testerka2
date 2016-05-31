@@ -38,7 +38,7 @@
                 </td>
 
                 <td>
-                    <pre><#if result.output?length == 0>${"<EMPTY>"?html}<#else>${result.output?html}</#if></pre>
+                    <pre><#if result.output?length <= 1>${"<EMPTY>"?html}<#else>${result.output?html}</#if></pre>
                 </td>
 
                 <td>
