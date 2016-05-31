@@ -62,7 +62,7 @@ public abstract class SolutionRunner {
         } catch (TimeoutException e) {
             Thread.currentThread().interrupt();
             System.out.printf(">>> SOLUTION TIMED OUT\n");
-            throw e;
+            throw new TimeoutException("Solution timed out");
         } finally {
             process.destroy();
         }
