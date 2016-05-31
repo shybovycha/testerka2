@@ -83,7 +83,7 @@ class Car {
 
     @Override
     public String toString() {
-        return String.format("%c [%c] %s", this.id, this.dir, this.pos.toString());
+        return String.format("%c [%c, %d] %s", this.id, this.dir, this.len, this.pos.toString());
     }
 }
 
@@ -96,7 +96,14 @@ class Field {
     }
 
     public boolean isMoveValid(Move move) {
-        Car car = move.car;
+        Optional<Car> moveCar = this.cars.stream().filter(c -> c.id == move.car.id).findFirst();
+
+        if (!moveCar.isPresent()) {
+            System.out.printf(">>>> Move %s is invalid: car does not exist\n", move);
+            return false;
+        }
+
+        Car car = moveCar.get();
 
         List<Car> otherCars =
                 this.cars.stream().filter(c -> c.id != car.id).collect(Collectors.toList());
@@ -105,16 +112,22 @@ class Field {
             if (move.dir == 'U') {
                 for (int py = 0; py < move.d; ++py) {
                     Point p = new Point(car.pos.x, car.pos.y + car.len + py);
+                    Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
-                    if (otherCars.stream().anyMatch(c -> c.checkCollision(p)))
+                    if (other.isPresent()) {
+                        System.out.printf(">>>> Move %s is invalid - overlapping at %s with %s\n", move, p, other);
                         return false;
+                    }
                 }
             } else if (move.dir == 'D') {
                 for (int py = 0; py < move.d; ++py) {
                     Point p = new Point(car.pos.x, car.pos.y - py);
+                    Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
-                    if (otherCars.stream().anyMatch(c -> c.checkCollision(p)))
+                    if (other.isPresent()) {
+                        System.out.printf(">>>> Move %s is invalid - overlapping at %s with %s\n", move, p, other);
                         return false;
+                    }
                 }
             } else {
                 return false;
@@ -123,16 +136,22 @@ class Field {
             if (move.dir == 'R') {
                 for (int px = 0; px < move.d; ++px) {
                     Point p = new Point(car.pos.x + car.len + px, car.pos.y);
+                    Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
-                    if (otherCars.stream().anyMatch(c -> c.checkCollision(p)))
+                    if (other.isPresent()) {
+                        System.out.printf(">>>> Move %s is invalid - overlapping at %s with %s\n", move, p, other);
                         return false;
+                    }
                 }
             } else if (move.dir == 'L') {
                 for (int px = 0; px < move.d; ++px) {
                     Point p = new Point(car.pos.x - px, car.pos.y);
+                    Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
-                    if (otherCars.stream().anyMatch(c -> c.checkCollision(p)))
+                    if (other.isPresent()) {
+                        System.out.printf(">>>> Move %s is invalid - overlapping at %s with %s\n", move, p, other);
                         return false;
+                    }
                 }
             } else {
                 return false;
@@ -390,8 +409,10 @@ public class SolutionChecker {
         result.setPoints(moves.size());
 
         for (Move move : moves) {
-            if (!field.isMoveValid(move))
+            if (!field.isMoveValid(move)) {
+                System.out.printf(">>>> Move %s is not valid\n", move.toString());
                 break;
+            }
 
             field = field.applyMove(move);
         }
