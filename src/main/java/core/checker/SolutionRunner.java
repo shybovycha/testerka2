@@ -42,12 +42,12 @@ public abstract class SolutionRunner {
         PrintWriter writer = new PrintWriter(process.getOutputStream());
 
         try {
-            timedCall(process::waitFor, runTimeout, TimeUnit.MILLISECONDS);
-
             writer.write("1\n"); // FIXME: number of test cases
 
             writer.write(input);
             writer.close();
+
+            timedCall(process::waitFor, runTimeout, TimeUnit.MILLISECONDS);
 
             while (stdoutScanner.hasNextLine()) {
                 output.append(stdoutScanner.nextLine()).append("\n");
