@@ -124,17 +124,21 @@ public class RootController {
 
         solutions.stream().forEach(s -> s.setPoints(pointCalculator.getPointsFor(s)));
 
-        Map<String, Solution> bestSolutions = new HashMap<>();
+        Map<String, Solution> solutionMap = new HashMap<>();
 
         for (Solution s : solutions) {
-            Solution prev = bestSolutions.get(s.getAuthor());
+            Solution prev = solutionMap.get(s.getAuthor());
 
             if ((prev == null) || (prev != null && s.getPoints() > prev.getPoints())) {
-                bestSolutions.put(s.getAuthor(), s);
+                solutionMap.put(s.getAuthor(), s);
             }
         }
 
-        model.addAttribute("allSolutions", bestSolutions.values());
+        List<Solution> bestSolutions = solutionMap.values()
+                .stream()
+                .sorted((s1, s2) -> s1.getAuthor().compareTo(s2.getAuthor())).collect(Collectors.toList());
+
+        model.addAttribute("allSolutions", bestSolutions);
 
         return "results";
     }
