@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -103,6 +105,38 @@ public class RootController {
         solutionRepository.save(solution);
 
         return String.format("redirect:/solution/%d", solution.getId());
+    }
+
+    @RequestMapping("/results")
+    String results(Model model) {
+        List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
+                .filter(s -> s.getStatus() == Solution.SolutionStatus.PASSED_CORRECT)
+                .sorted((s1, s2) ->
+                        Integer.compare(
+                                s1.getResults().stream()
+                                        .map(SolutionResult::getPoints)
+                                        .collect(Collectors.summingInt(Integer::intValue)),
+                                s2.getResults().stream()
+                                        .map(SolutionResult::getPoints)
+                                        .collect(Collectors.summingInt(Integer::intValue))))
+                .sorted((s1, s2) -> Long.compare(s2.getCreatedAt().getTime(), s1.getCreatedAt().getTime()))
+                .collect(Collectors.toList());
+
+        solutions.stream().forEach(s -> s.setPoints(pointCalculator.getPointsFor(s)));
+
+        Map<String, Solution> bestSolutions = new HashMap<>();
+
+        for (Solution s : solutions) {
+            Solution prev = bestSolutions.get(s.getAuthor());
+
+            if (prev != null && s.getPoints() > prev.getPoints()) {
+                bestSolutions.put(s.getAuthor(), s);
+            }
+        }
+
+        model.addAttribute("allSolutions", bestSolutions.values());
+
+        return "results";
     }
 
     public static void main(String[] args) throws Exception {
