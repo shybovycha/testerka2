@@ -129,7 +129,7 @@ public class RootController {
         for (Solution s : solutions) {
             Solution prev = bestSolutions.get(s.getAuthor());
 
-            if (prev != null && s.getPoints() > prev.getPoints()) {
+            if ((prev == null) || (prev != null && s.getPoints() > prev.getPoints())) {
                 bestSolutions.put(s.getAuthor(), s);
             }
         }
