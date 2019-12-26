@@ -31,14 +31,20 @@ import java.util.List;
 @ComponentScan(basePackages = { "pl.edu.uj.mpi.testerka2.core" })
 @SpringBootApplication(exclude = { EmbeddedServletContainerAutoConfiguration.class, WebMvcAutoConfiguration.class })
 public class WorkerRunner {
-    @Autowired
-    SolutionRepository solutionRepository;
+    private SolutionRepository solutionRepository;
+    private SolutionResultRepository solutionResultRepository;
+    private SolutionChecker checker;
 
     @Autowired
-    SolutionResultRepository solutionResultRepository;
-
-    @Autowired
-    SolutionChecker checker;
+    public WorkerRunner(
+        SolutionRepository solutionRepository,
+        SolutionResultRepository solutionResultRepository,
+        SolutionChecker checker
+    ) {
+        this.solutionRepository = solutionRepository;
+        this.solutionResultRepository = solutionResultRepository;
+        this.checker = checker;
+    }
 
     @Scheduled(fixedRate = 5000)
     public void checkForPendingSolutions() {

@@ -11,8 +11,7 @@ import java.io.File;
  */
 @Service
 public class CppSolutionRunner extends CompiledSolutionRunner {
-    public CppSolutionRunner() {
-    }
+    public CppSolutionRunner() {}
 
     @Override
     protected ProcessBuilder getCompilerProcessBuilder(Solution solution) {

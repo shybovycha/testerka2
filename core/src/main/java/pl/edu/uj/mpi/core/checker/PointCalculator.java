@@ -14,10 +14,12 @@ import java.util.stream.Collectors;
  */
 @Service
 public class PointCalculator {
-    @Autowired
-    protected SolutionResultRepository solutionResultRepository;
+    private SolutionResultRepository solutionResultRepository;
 
-    public PointCalculator() {}
+    @Autowired
+    public PointCalculator(SolutionResultRepository solutionResultRepository) {
+        this.solutionResultRepository = solutionResultRepository;
+    }
 
     public int getPointsFor(Solution solution) {
         List<SolutionResult> results = (List<SolutionResult>) solutionResultRepository.findAll();

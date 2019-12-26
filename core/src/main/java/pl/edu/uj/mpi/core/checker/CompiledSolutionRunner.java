@@ -10,9 +10,9 @@ import java.util.Scanner;
 public abstract class CompiledSolutionRunner extends SolutionRunner {
     @Override
     public String getOutputFor(Solution solution, String input) throws Exception {
-        this.compile(solution);
+        compile(solution);
 
-        return this.runBinary(solution, input);
+        return runBinary(solution, input);
     }
 
     protected void compile(Solution solution) throws Exception {

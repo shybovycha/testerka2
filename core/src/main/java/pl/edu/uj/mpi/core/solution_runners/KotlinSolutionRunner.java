@@ -11,8 +11,7 @@ import java.io.File;
  */
 @Service
 public class KotlinSolutionRunner extends CompiledSolutionRunner {
-    public KotlinSolutionRunner() {
-    }
+    public KotlinSolutionRunner() {}
 
     @Override
     protected ProcessBuilder getCompilerProcessBuilder(Solution solution) {

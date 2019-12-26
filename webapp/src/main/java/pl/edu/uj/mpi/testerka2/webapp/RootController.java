@@ -33,14 +33,20 @@ import java.util.stream.StreamSupport;
 @ComponentScan(basePackages = {"pl.edu.uj.mpi.testerka2.core"})
 @Controller
 public class RootController {
-    @Autowired
-    SolutionRepository solutionRepository;
+    private SolutionRepository solutionRepository;
+    private List<SolutionRunner> availableRunners;
+    private PointCalculator pointCalculator;
 
     @Autowired
-    List<SolutionRunner> availableRunners;
-
-    @Autowired
-    PointCalculator pointCalculator;
+    public RootController(
+        SolutionRepository solutionRepository,
+        List<SolutionRunner> availableRunners,
+        PointCalculator pointCalculator
+    ) {
+        this.solutionRepository = solutionRepository;
+        this.availableRunners = availableRunners;
+        this.pointCalculator = pointCalculator;
+    }
 
     @RequestMapping("/")
     String home(Model model) {

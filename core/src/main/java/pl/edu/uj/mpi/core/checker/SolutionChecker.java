@@ -313,19 +313,23 @@ class Point {
 
 @Component
 public class SolutionChecker {
-    public SolutionChecker() {}
-
-    @Autowired
     private TestCaseRepository testCaseRepository;
-
-    @Autowired
     private SolutionRepository solutionRepository;
-
-    @Autowired
     private SolutionResultRepository solutionResultRepository;
+    private List<SolutionRunner> runnersAvailable;
 
     @Autowired
-    private List<SolutionRunner> runnersAvailable;
+    public SolutionChecker(
+        TestCaseRepository testCaseRepository,
+        SolutionRepository solutionRepository,
+        SolutionResultRepository solutionResultRepository,
+        List<SolutionRunner> runnersAvailable) {
+
+        this.testCaseRepository = testCaseRepository;
+        this.solutionRepository = solutionRepository;
+        this.solutionResultRepository = solutionResultRepository;
+        this.runnersAvailable = runnersAvailable;
+    }
 
     // gets list of test cases passed successfully
     public void check(Solution solution) {
