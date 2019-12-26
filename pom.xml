@@ -5,13 +5,14 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>pl.edu.uj.ii</groupId>
+    <groupId>pl.edu.uj.mpi</groupId>
     <artifactId>testerka2</artifactId>
     <packaging>jar</packaging>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
 
     <properties>
         <java.version>1.8</java.version>
+        <mysql.connector.version>5.1.38</mysql.connector.version>
     </properties>
 
     <parent>
@@ -20,7 +21,6 @@
         <version>1.3.5.RELEASE</version>
     </parent>
 
-    <!-- Well, fuck you, Maven! Spent three damn hours looking for the reason Spring Boot did not serve my statics! -->
     <profiles>
         <profile>
             <id>webapp</id>
@@ -31,6 +31,7 @@
                         <directory>src/main/resources/static</directory>
                         <targetPath>static</targetPath>
                     </resource>
+
                     <resource>
                         <directory>src/main/resources/templates</directory>
                         <targetPath>templates</targetPath>
@@ -42,7 +43,7 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>web_application.RootController</mainClass>
+                            <mainClass>pl.edu.uj.mpi.web_application.RootController</mainClass>
                             <classifier>webapp</classifier>
                         </configuration>
                     </plugin>
@@ -73,9 +74,12 @@
                         <groupId>org.springframework.boot</groupId>
                         <artifactId>spring-boot-maven-plugin</artifactId>
                         <configuration>
-                            <mainClass>worker.WorkerRunner</mainClass>
+                            <mainClass>pl.edu.uj.mpi.worker.WorkerRunner</mainClass>
                             <classifier>worker</classifier>
-                            <excludeArtifactIds>spring-boot-starter-web,spring-boot-starter-freemarker</excludeArtifactIds>
+                            <excludeArtifactIds>
+                                spring-boot-starter-web,
+                                spring-boot-starter-freemarker
+                            </excludeArtifactIds>
                         </configuration>
                     </plugin>
                 </plugins>
@@ -88,22 +92,26 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-freemarker</artifactId>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.38</version>
+            <version>${mysql.connector.version}</version>
         </dependency>
     </dependencies>
 </project>
