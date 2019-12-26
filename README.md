@@ -31,10 +31,10 @@ Each application component requires a separate build.
 
 ### Web application
 
-First, install the front-end dependencies with Bower by navigating to the `src/main/resources/static` and running
+First, install the front-end dependencies by navigating to the `src/main/resources/static` and running
 
 ```
-$ bower install
+$ npm install
 ```
 
 **IMPORTANT:** you will also have to specify the JDBC params to connect to the database in `src/main/resources/application.properties`. Currently the system only supports MySQL and PosgreSQL.
@@ -67,6 +67,6 @@ Simplest way to run the application is using `java -jar`. Together with a task m
 one can easily manage both parts of the system on a server.
 
 ```
-$ java -jar target/testerka2-0.1.1-webapp.jar
-$ java -jar target/testerka2-0.1.1-worker.jar
+$ mvn spring-boot:run -P webapp
+$ mvn spring-boot:run -P worker
 ```
