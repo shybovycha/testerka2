@@ -66,7 +66,9 @@ $ mvn flyway:migrate -Dflyway.url=jdbc:postgresql://localhost:5432/testerka2 -Df
 Simplest way to run the application is using `java -jar`. Together with a task manager such as `pm2`,
 one can easily manage both parts of the system on a server.
 
+Bare in mind: you will have to put the `application.properties` file in the working directory or pass the Spring datasource params as `-D` properties to the application.
+
 ```
-$ mvn spring-boot:run -P webapp
-$ mvn spring-boot:run -P worker
+$ java -jar webapp/target/testerka2-webapp-0.1.1-SNAPSHOT-runnable.jar
+$ java -jar worker/target/testerka2-worker-0.1.1-SNAPSHOT-runnable.jar
 ```

@@ -3,3 +3,5 @@ target
 *.iml
 bower_components
 solutions
+**/resources/**/node/
+node_modules/
