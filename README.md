@@ -1,0 +1,64 @@
+# testerka2
+
+This is a programmatic solution checker for the
+_Matematyczne Podstawy Informatyki_ course at _Jagiellonian University_, year of 2016.
+
+The system currently checks the solutions to only one problem - cars in a room.
+
+The supported solution languages are:
+
+* CommonLisp
+* C++
+* C#
+* Java
+* Kotlin
+* Python 2, Python 3
+* Ruby
+
+The system consists of two artifacts - **webapp** and **worker**.
+
+Web application is only used as an interface - to accept the solutions and put them in a queue and to display the solution check results (e.g. how successful a solution was).
+
+The worker performs the heavy lifting - compiling, running and verifying the solutions.
+
+The queue is implemented on database. This way it persists the data.
+
+Worker uses Spring Scheduler to run at certain times, pick the solutions pending and process them.
+
+## Building
+
+Each application component requires a separate build.
+
+### Web application
+
+First, install the front-end dependencies with Bower by navigating to the `src/main/resources/static` and running
+
+```
+$ bower install
+```
+
+**IMPORTANT:** you will also have to specify the JDBC params to connect to the database in `src/main/resources/application.properties`. Currently the system only supports MySQL.
+
+Then, create a JAR file with Maven and using the `worker` profile:
+
+```
+$ mvn clean package -P webapp
+```
+
+### Solution checker (worker)
+
+Build the JAR with `worker` Maven profile:
+
+```
+$ mvn clean package -P worker
+```
+
+## Running
+
+Simplest way to run the application is using `java -jar`. Together with a task manager such as `pm2`,
+one can easily manage both parts of the system on a server.
+
+```
+$ java -jar target/testerka2-0.1.1-webapp.jar
+$ java -jar target/testerka2-0.1.1-worker.jar
+```
