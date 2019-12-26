@@ -218,9 +218,7 @@ class FieldParser {
     protected Field parseSilently(String input) throws InvalidFieldFormatException {
         List<Car> cars = new ArrayList<>();
 
-        Scanner scanner = new Scanner(new StringReader(input));
-
-        try {
+        try (Scanner scanner = new Scanner(new StringReader(input))) {
             int n = Integer.parseInt(scanner.nextLine());
 
             for (int i = 0; i < n; i++) {
@@ -272,9 +270,7 @@ class MoveParser {
     public List<Move> parseAll(String input) {
         List<Move> res = new ArrayList<>();
 
-        try {
-            Scanner scanner = new Scanner(new StringReader(input));
-
+        try (Scanner scanner = new Scanner(new StringReader(input))) {
             int n = Integer.parseInt(scanner.nextLine());
 
             for (int i = 0; i < n; i++) {

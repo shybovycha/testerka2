@@ -37,11 +37,12 @@ public abstract class SolutionRunner {
 
         Process process = this.getRunProcessBuilder(solution).start();
 
-        Scanner stdoutScanner = new Scanner(process.getInputStream());
-        Scanner stderrScanner = new Scanner(process.getErrorStream());
-        PrintWriter writer = new PrintWriter(process.getOutputStream());
+        try (
+        		Scanner stdoutScanner = new Scanner(process.getInputStream());
+        		Scanner stderrScanner = new Scanner(process.getErrorStream());
+        		PrintWriter writer = new PrintWriter(process.getOutputStream());
+        ) {
 
-        try {
             writer.write("1\n"); // FIXME: number of test cases
 
             writer.write(input);
@@ -57,12 +58,13 @@ public abstract class SolutionRunner {
                 errors.append(stderrScanner.nextLine()).append("\n");
             }
 
-            if (errors.length() > 0)
+            if (errors.length() > 0) {
                 throw new SolutionRuntimeException(errors.toString());
+            }
         } catch (TimeoutException e) {
             throw new TimeoutException("Solution timed out");
         } finally {
-            process.destroy();
+        	process.destroy();
         }
 
         return output.toString();

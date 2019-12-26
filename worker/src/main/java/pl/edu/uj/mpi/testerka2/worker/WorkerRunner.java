@@ -3,7 +3,6 @@ package pl.edu.uj.mpi.testerka2.worker;
 import pl.edu.uj.mpi.testerka2.core.checker.SolutionChecker;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
-import pl.edu.uj.mpi.testerka2.core.repositories.SolutionResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
@@ -33,17 +32,14 @@ import java.util.List;
 @SpringBootApplication(exclude = { ServletWebServerFactoryAutoConfiguration.class, WebMvcAutoConfiguration.class })
 public class WorkerRunner {
     private SolutionRepository solutionRepository;
-    private SolutionResultRepository solutionResultRepository;
     private SolutionChecker checker;
 
     @Autowired
     public WorkerRunner(
         SolutionRepository solutionRepository,
-        SolutionResultRepository solutionResultRepository,
         SolutionChecker checker
     ) {
         this.solutionRepository = solutionRepository;
-        this.solutionResultRepository = solutionResultRepository;
         this.checker = checker;
     }
 

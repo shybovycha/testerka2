@@ -20,11 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -53,18 +49,12 @@ public class RootController {
     String home(Model model) {
         List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
                 .filter(s -> s.getStatus() == Solution.SolutionStatus.PASSED_CORRECT)
-                .sorted((s1, s2) ->
-                        Integer.compare(
-                                s1.getResults().stream()
-                                        .map(SolutionResult::getPoints)
-                                        .collect(Collectors.summingInt(Integer::intValue)),
-                                s2.getResults().stream()
-                                        .map(SolutionResult::getPoints)
-                                        .collect(Collectors.summingInt(Integer::intValue))))
+                .sorted(Comparator.comparingInt(s -> (Integer) s.getResults().stream()
+                        .map(SolutionResult::getPoints).mapToInt(Integer::intValue).sum()))
                 .sorted((s1, s2) -> Long.compare(s2.getCreatedAt().getTime(), s1.getCreatedAt().getTime()))
                 .collect(Collectors.toList());
 
-        solutions.stream().forEach(s -> s.setPoints(pointCalculator.getPointsFor(s)));
+        solutions.forEach(s -> s.setPoints(pointCalculator.getPointsFor(s)));
 
         model.addAttribute("allSolutions", solutions);
 
@@ -85,16 +75,14 @@ public class RootController {
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     String submitSolution(@RequestParam("source") MultipartFile sourceFile,
-                          @RequestParam() String language,
+                          @RequestParam("language") String language,
                           @RequestParam("author") String author) {
         Solution solution = new Solution();
 
         if (!sourceFile.isEmpty()) {
             StringBuilder source = new StringBuilder();
 
-            try {
-                Scanner scanner = new Scanner(sourceFile.getInputStream());
-
+            try (Scanner scanner = new Scanner(sourceFile.getInputStream())) {
                 while (scanner.hasNextLine()) {
                     source.append(scanner.nextLine());
                     source.append("\n");
@@ -118,39 +106,34 @@ public class RootController {
     String results(Model model) {
         List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
                 .filter(s -> s.getStatus() == Solution.SolutionStatus.PASSED_CORRECT)
-                .sorted((s1, s2) ->
-                        Integer.compare(
-                                s1.getResults().stream()
-                                        .map(SolutionResult::getPoints)
-                                        .collect(Collectors.summingInt(Integer::intValue)),
-                                s2.getResults().stream()
-                                        .map(SolutionResult::getPoints)
-                                        .collect(Collectors.summingInt(Integer::intValue))))
+                .sorted(Comparator.comparingInt(s -> (Integer) s.getResults().stream()
+                        .map(SolutionResult::getPoints).mapToInt(Integer::intValue).sum()))
                 .sorted((s1, s2) -> Long.compare(s2.getCreatedAt().getTime(), s1.getCreatedAt().getTime()))
                 .collect(Collectors.toList());
 
-        solutions.stream().forEach(s -> s.setPoints(pointCalculator.getPointsFor(s)));
+        solutions.forEach(s -> s.setPoints(pointCalculator.getPointsFor(s)));
 
-        Map<String, Solution> solutionMap = new HashMap<>();
+        Map<String, Solution> solutionMap = new TreeMap<>();
 
         for (Solution s : solutions) {
             Solution prev = solutionMap.get(s.getAuthor());
 
-            if ((prev == null) || (prev != null && s.getPoints() > prev.getPoints())) {
+            if (prev == null || s.getPoints() > prev.getPoints()) {
                 solutionMap.put(s.getAuthor(), s);
             }
         }
 
         List<Solution> bestSolutions = solutionMap.values()
                 .stream()
-                .sorted((s1, s2) -> s1.getAuthor().compareTo(s2.getAuthor())).collect(Collectors.toList());
+                .sorted(Comparator.comparing(Solution::getAuthor))
+                .collect(Collectors.toList());
 
         model.addAttribute("allSolutions", bestSolutions);
 
         return "results";
     }
 
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         SpringApplication.run(RootController.class, args);
     }
 }
