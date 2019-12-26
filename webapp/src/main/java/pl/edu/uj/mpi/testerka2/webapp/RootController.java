@@ -8,7 +8,7 @@ import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.orm.jpa.EntityScan;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Controller;
@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -75,9 +76,9 @@ public class RootController {
 
     @RequestMapping(value = "/solution/{id}")
     String viewSolution(@PathVariable("id") Long solutionId, Model model) {
-        Solution solution = solutionRepository.findOne(solutionId);
+        Optional<Solution> solution = solutionRepository.findById(solutionId);
 
-        model.addAttribute("solution", solution);
+        model.addAttribute("solution", solution.orElse(null));
 
         return "view-solution";
     }
