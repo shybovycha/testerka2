@@ -1,10 +1,7 @@
 package pl.edu.uj.mpi.testerka2.webapp;
 
-import pl.edu.uj.mpi.testerka2.core.checker.PointCalculator;
-import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
-import pl.edu.uj.mpi.testerka2.core.entities.Solution;
-import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
-import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -18,6 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import pl.edu.uj.mpi.testerka2.core.checker.PointCalculator;
+import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
+import pl.edu.uj.mpi.testerka2.core.entities.Solution;
+import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
+import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
 
 import java.io.IOException;
 import java.util.*;
@@ -30,6 +32,8 @@ import java.util.stream.StreamSupport;
 @ComponentScan(basePackages = {"pl.edu.uj.mpi.testerka2.core"})
 @Controller
 public class RootController {
+    private static final Logger LOG = LoggerFactory.getLogger(RootController.class);
+
     private SolutionRepository solutionRepository;
     private List<SolutionRunner> availableRunners;
     private PointCalculator pointCalculator;
@@ -88,7 +92,7 @@ public class RootController {
                     source.append("\n");
                 }
             } catch (IOException e) {
-                // TODO: logger
+                LOG.error("Can not submit solution", e);
             }
 
             solution.setSource(source.toString());

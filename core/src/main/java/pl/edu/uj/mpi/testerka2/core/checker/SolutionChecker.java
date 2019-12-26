@@ -1,5 +1,7 @@
 package pl.edu.uj.mpi.testerka2.core.checker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
 import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
@@ -309,6 +311,8 @@ class Point {
 
 @Component
 public class SolutionChecker {
+    private static final Logger LOG = LoggerFactory.getLogger(SolutionChecker.class);
+
     private TestCaseRepository testCaseRepository;
     private SolutionRepository solutionRepository;
     private SolutionResultRepository solutionResultRepository;
@@ -334,12 +338,12 @@ public class SolutionChecker {
         solution.setStatus(Solution.SolutionStatus.CHECKING);
         solutionRepository.save(solution);
 
-        System.out.printf(">> CHECKING SOLUTION %d\n", solution.getId());
+        LOG.debug("CHECKING SOLUTION {}", solution.getId());
 
         if (!runner.isPresent()) {
             solution.setStatus(Solution.SolutionStatus.REJECTED);
             solutionRepository.save(solution);
-            System.out.printf(">> REJECTED - %s HAS NO MATCH\n", solution.getLanguage());
+            LOG.debug("REJECTED - {} HAS NO MATCH", solution.getLanguage());
             return;
         }
 
@@ -347,7 +351,7 @@ public class SolutionChecker {
         // thus make this class being instantiated once
         Iterable<TestCase> testCaseEntities = testCaseRepository.findAll();
 
-        System.out.printf(">> RUNNING TEST CASES...\n");
+        LOG.debug("RUNNING TEST CASES...");
 
         // List<SolutionResult> results = new ArrayList<>();
 
@@ -359,12 +363,12 @@ public class SolutionChecker {
                 try {
                     result = checkSingleTest(runner.get(), solution, testCase);
 
-                    System.out.printf(">>> TEST CASE #%d: %s\n", testCase.getId(), result.getPassed() ? "PASSED" : "FAILED");
+                    LOG.debug("TEST CASE #{}: {}", testCase.getId(), result.getPassed() ? "PASSED" : "FAILED");
                 } catch (TimeoutException e) {
                     e.printStackTrace();
                     result.setOutput("<TIMEOUT>");
 
-                    System.out.printf(">>> TEST CASE #%d TIMED OUT\n", testCase.getId());
+                    LOG.error("TEST CASE #{} TIMED OUT", testCase.getId(), e);
                 } finally {
                     solutionResultRepository.save(result);
 
@@ -378,8 +382,7 @@ public class SolutionChecker {
             solution.setErrorMessage(e.getMessage());
             solutionRepository.save(solution);
 
-            e.printStackTrace();
-            System.out.printf(">> ERRORS DURING RUN: %s.\n", e.getMessage());
+            LOG.error("ERRORS DURING RUN", e);
 
             return;
         }
@@ -390,7 +393,7 @@ public class SolutionChecker {
             solution.setStatus(Solution.SolutionStatus.PASSED_INCORRECT);
         }
 
-        System.out.printf(">> DONE with status %s\n", solution.getStatusString());
+        LOG.debug("DONE with status {}", solution.getStatusString());
 
         solutionRepository.save(solution);
     }
@@ -410,7 +413,7 @@ public class SolutionChecker {
 
         for (Move move : moves) {
             if (!field.isMoveValid(move)) {
-                System.out.printf(">>>> Move %s is not valid\n", move.toString());
+                LOG.debug("Move {} is not valid", move.toString());
                 break;
             }
 

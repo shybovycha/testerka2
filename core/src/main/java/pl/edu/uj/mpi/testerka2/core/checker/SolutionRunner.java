@@ -1,5 +1,7 @@
 package pl.edu.uj.mpi.testerka2.core.checker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -12,6 +14,8 @@ import java.util.concurrent.*;
  * Created by shybovycha on 12/05/16.
  */
 public abstract class SolutionRunner {
+    private static final Logger LOG = LoggerFactory.getLogger(SolutionRunner.class);
+
     @Value("${runner.timeout}")
     private int runTimeout;
 
@@ -91,8 +95,7 @@ public abstract class SolutionRunner {
 
             writer.close();
         } catch (Exception e) {
-            // TODO: logger
-            e.printStackTrace();
+            LOG.error("Error writing solution to a file", e);
         }
     }
 }

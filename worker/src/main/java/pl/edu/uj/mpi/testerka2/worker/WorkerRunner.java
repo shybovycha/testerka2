@@ -45,7 +45,7 @@ public class WorkerRunner {
 
     @Scheduled(fixedRate = 5000)
     public void checkForPendingSolutions() {
-        List<Solution> pendingSolutions = (List<Solution>) solutionRepository.findByStatus(Solution.SolutionStatus.PENDING);
+        List<Solution> pendingSolutions = solutionRepository.findByStatus(Solution.SolutionStatus.PENDING);
 
         for (Solution solution : pendingSolutions) {
             solution.setStatus(Solution.SolutionStatus.CHECKING);
