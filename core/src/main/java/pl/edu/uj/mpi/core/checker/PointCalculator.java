@@ -1,8 +1,8 @@
-package pl.edu.uj.mpi.core.checker;
+package pl.edu.uj.mpi.testerka2.core.checker;
 
-import pl.edu.uj.mpi.core.entities.Solution;
-import pl.edu.uj.mpi.core.entities.SolutionResult;
-import pl.edu.uj.mpi.core.repositories.SolutionResultRepository;
+import pl.edu.uj.mpi.testerka2.core.entities.Solution;
+import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
+import pl.edu.uj.mpi.testerka2.core.repositories.SolutionResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

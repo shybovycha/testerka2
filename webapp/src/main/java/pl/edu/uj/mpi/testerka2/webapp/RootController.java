@@ -1,10 +1,10 @@
-package pl.edu.uj.mpi.web_application;
+package pl.edu.uj.mpi.testerka2.webapp;
 
-import pl.edu.uj.mpi.core.checker.PointCalculator;
-import pl.edu.uj.mpi.core.checker.SolutionRunner;
-import pl.edu.uj.mpi.core.entities.Solution;
-import pl.edu.uj.mpi.core.entities.SolutionResult;
-import pl.edu.uj.mpi.core.repositories.SolutionRepository;
+import pl.edu.uj.mpi.testerka2.core.checker.PointCalculator;
+import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
+import pl.edu.uj.mpi.testerka2.core.entities.Solution;
+import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
+import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -28,9 +28,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @EnableAutoConfiguration
-@EnableJpaRepositories("pl.edu.uj.mpi.core.repositories")
-@EntityScan("pl.edu.uj.mpi.core.entities")
-@ComponentScan(basePackages = {"pl.edu.uj.mpi.core"})
+@EnableJpaRepositories("pl.edu.uj.mpi.testerka2.core.repositories")
+@EntityScan("pl.edu.uj.mpi.testerka2.core.entities")
+@ComponentScan(basePackages = {"pl.edu.uj.mpi.testerka2.core"})
 @Controller
 public class RootController {
     @Autowired

@@ -1,6 +1,6 @@
-package pl.edu.uj.mpi.core.checker;
+package pl.edu.uj.mpi.testerka2.core.checker;
 
-import pl.edu.uj.mpi.core.entities.Solution;
+import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.io.File;

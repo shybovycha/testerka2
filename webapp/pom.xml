@@ -33,7 +33,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>pl.edu.uj.mpi.web_application.RootController</mainClass>
+                    <mainClass>pl.edu.uj.mpi.testerka2.webapp.RootController</mainClass>
                     <classifier>runnable</classifier>
                 </configuration>
             </plugin>

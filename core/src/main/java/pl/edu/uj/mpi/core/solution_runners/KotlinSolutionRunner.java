@@ -1,7 +1,7 @@
-package pl.edu.uj.mpi.core.solution_runners;
+package pl.edu.uj.mpi.testerka2.core.solution_runners;
 
-import pl.edu.uj.mpi.core.checker.CompiledSolutionRunner;
-import pl.edu.uj.mpi.core.entities.Solution;
+import pl.edu.uj.mpi.testerka2.core.checker.CompiledSolutionRunner;
+import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import org.springframework.stereotype.Service;
 
 import java.io.File;

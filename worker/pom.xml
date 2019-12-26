@@ -34,7 +34,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <mainClass>pl.edu.uj.mpi.worker.WorkerRunner</mainClass>
+                    <mainClass>pl.edu.uj.mpi.testerka2.worker.WorkerRunner</mainClass>
                     <classifier>runnable</classifier>
                     <excludeArtifactIds>
                         spring-boot-starter-web,

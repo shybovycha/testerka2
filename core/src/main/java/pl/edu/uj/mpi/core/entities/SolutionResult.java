@@ -1,4 +1,4 @@
-package pl.edu.uj.mpi.core.entities;
+package pl.edu.uj.mpi.testerka2.core.entities;
 
 import javax.persistence.*;
 

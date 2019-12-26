@@ -1,9 +1,9 @@
-package pl.edu.uj.mpi.worker;
+package pl.edu.uj.mpi.testerka2.worker;
 
-import pl.edu.uj.mpi.core.checker.SolutionChecker;
-import pl.edu.uj.mpi.core.entities.Solution;
-import pl.edu.uj.mpi.core.repositories.SolutionRepository;
-import pl.edu.uj.mpi.core.repositories.SolutionResultRepository;
+import pl.edu.uj.mpi.testerka2.core.checker.SolutionChecker;
+import pl.edu.uj.mpi.testerka2.core.entities.Solution;
+import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
+import pl.edu.uj.mpi.testerka2.core.repositories.SolutionResultRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -25,10 +25,10 @@ import java.util.List;
  */
 @Component
 @EnableScheduling
-@EnableJpaRepositories("pl.edu.uj.mpi.core.repositories")
-@EntityScan("pl.edu.uj.mpi.core.entities")
+@EnableJpaRepositories("pl.edu.uj.mpi.testerka2.core.repositories")
+@EntityScan("pl.edu.uj.mpi.testerka2.core.entities")
 @EnableAutoConfiguration
-@ComponentScan(basePackages = { "pl.edu.uj.mpi.core" })
+@ComponentScan(basePackages = { "pl.edu.uj.mpi.testerka2.core" })
 @SpringBootApplication(exclude = { EmbeddedServletContainerAutoConfiguration.class, WebMvcAutoConfiguration.class })
 public class WorkerRunner {
     @Autowired

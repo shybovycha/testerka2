@@ -1,6 +1,6 @@
-package pl.edu.uj.mpi.core.repositories;
+package pl.edu.uj.mpi.testerka2.core.repositories;
 
-import pl.edu.uj.mpi.core.entities.TestCase;
+import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
 import org.springframework.data.repository.CrudRepository;
 
 /**
