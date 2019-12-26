@@ -37,7 +37,7 @@ First, install the front-end dependencies with Bower by navigating to the `src/m
 $ bower install
 ```
 
-**IMPORTANT:** you will also have to specify the JDBC params to connect to the database in `src/main/resources/application.properties`. Currently the system only supports MySQL.
+**IMPORTANT:** you will also have to specify the JDBC params to connect to the database in `src/main/resources/application.properties`. Currently the system only supports MySQL and PosgreSQL.
 
 Then, create a JAR file with Maven and using the `worker` profile:
 
@@ -54,6 +54,14 @@ $ mvn clean package -P worker
 ```
 
 ## Running
+
+First of all, you will need a database on your server. Install one according to your system requirements.
+
+Then you will need to create the database schema. Use Flyway for that _(**NOTE: THE DATA IS SAMPLE; USE YOUR OWN CREDENTIALS**)_:
+
+```
+$ mvn flyway:migrate -Dflyway.url=jdbc:postgresql://localhost:5432/testerka2 -Dflyway.user=postgres -Dflyway.password=Secret
+```
 
 Simplest way to run the application is using `java -jar`. Together with a task manager such as `pm2`,
 one can easily manage both parts of the system on a server.
