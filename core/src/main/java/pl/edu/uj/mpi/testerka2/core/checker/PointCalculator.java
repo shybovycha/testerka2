@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -34,16 +35,18 @@ public class PointCalculator {
                 .entrySet()
                 .stream()
                 .mapToDouble(e -> {
-                    int points = solution.getResults().stream()
+                    Optional<SolutionResult> solutionResultOpt = solution.getResults().stream()
                             .filter(r -> r.getTestCase().getId() == e.getKey().getId())
-                            .findFirst().get().getPoints();
+                            .findFirst();
+
+                    int points = solutionResultOpt.map(SolutionResult::getPoints).orElse(0);
 
                     int minPoints = e.getValue().stream().mapToInt(SolutionResult::getPoints).min().orElse(0);
 
                     return (double) minPoints / (double) points;
                 })
                 .average()
-                .getAsDouble();
+                .orElse(0);
 
         return (int) (avgPercent * 100);
     }
