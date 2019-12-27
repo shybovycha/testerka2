@@ -1,4 +1,4 @@
-package pl.edu.uj.mpi.testerka2.core.solution_runners;
+package pl.edu.uj.mpi.testerka2.worker.solution_runners;
 
 import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
@@ -10,16 +10,16 @@ import java.io.File;
  * Created by shybovycha on 12/05/16.
  */
 @Service
-public class CommonLispSolutionRunner extends SolutionRunner {
-    public CommonLispSolutionRunner() {}
+public class Python2SolutionRunner extends SolutionRunner {
+    public Python2SolutionRunner() {}
 
     @Override
     protected ProcessBuilder getRunProcessBuilder(Solution solution) {
-        String sourceFileName = "main.lisp";
+        String sourceFileName = "main.py";
 
         writeSolutionToFile(solution, sourceFileName);
 
-        ProcessBuilder pb = new ProcessBuilder("sbcl", "--script", "main.lisp");
+        ProcessBuilder pb = new ProcessBuilder("python2", "main.py");
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
@@ -27,11 +27,11 @@ public class CommonLispSolutionRunner extends SolutionRunner {
 
     @Override
     public String getAcceptedLanguage() {
-        return "clisp";
+        return "python2";
     }
 
     @Override
     public String getDescription() {
-        return "Common Lisp";
+        return "Python 2";
     }
 }

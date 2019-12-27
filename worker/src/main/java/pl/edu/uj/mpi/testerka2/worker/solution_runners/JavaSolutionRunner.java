@@ -1,4 +1,4 @@
-package pl.edu.uj.mpi.testerka2.core.solution_runners;
+package pl.edu.uj.mpi.testerka2.worker.solution_runners;
 
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.checker.CompiledSolutionRunner;

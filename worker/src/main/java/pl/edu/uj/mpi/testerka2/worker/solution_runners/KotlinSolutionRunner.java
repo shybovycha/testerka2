@@ -1,7 +1,7 @@
-package pl.edu.uj.mpi.testerka2.core.solution_runners;
+package pl.edu.uj.mpi.testerka2.worker.solution_runners;
 
-import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.checker.CompiledSolutionRunner;
+import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -10,16 +10,16 @@ import java.io.File;
  * Created by shybovycha on 12/05/16.
  */
 @Service
-public class CsharpSolutionRunner extends CompiledSolutionRunner {
-    public CsharpSolutionRunner() {}
+public class KotlinSolutionRunner extends CompiledSolutionRunner {
+    public KotlinSolutionRunner() {}
 
     @Override
     protected ProcessBuilder getCompilerProcessBuilder(Solution solution) {
-        String sourceFileName = "Main.cs";
+        String sourceFileName = "main.kt";
 
         writeSolutionToFile(solution, sourceFileName);
 
-        ProcessBuilder pb = new ProcessBuilder("mcs", "-o", "main", sourceFileName);
+        ProcessBuilder pb = new ProcessBuilder("kotlinc", "-include-runtime", sourceFileName, "-d", "main.jar");
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
@@ -27,7 +27,7 @@ public class CsharpSolutionRunner extends CompiledSolutionRunner {
 
     @Override
     protected ProcessBuilder getRunProcessBuilder(Solution solution) {
-        ProcessBuilder pb = new ProcessBuilder("mono", "main");
+        ProcessBuilder pb = new ProcessBuilder("java", "-jar", "main.jar");
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
@@ -35,11 +35,11 @@ public class CsharpSolutionRunner extends CompiledSolutionRunner {
 
     @Override
     public String getAcceptedLanguage() {
-        return "csharp";
+        return "kotlin";
     }
 
     @Override
     public String getDescription() {
-        return "C# (Mono)";
+        return "Kotlin 1.0";
     }
 }
