@@ -1,4 +1,4 @@
-package pl.edu.uj.mpi.testerka2.core.checker;
+package pl.edu.uj.mpi.testerka2.core.checker.exceptions;
 
 /**
  * Created by shybovycha on 30/05/16.

@@ -2,6 +2,7 @@ package pl.edu.uj.mpi.testerka2.core.checker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import pl.edu.uj.mpi.testerka2.core.checker.exceptions.SolutionRuntimeException;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import org.springframework.beans.factory.annotation.Value;
 
