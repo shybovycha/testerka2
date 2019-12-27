@@ -19,10 +19,16 @@ import pl.edu.uj.mpi.testerka2.core.checker.PointCalculator;
 import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
+import pl.edu.uj.mpi.testerka2.core.entities.SolutionStatus;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Scanner;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -52,7 +58,7 @@ public class RootController {
     @RequestMapping("/")
     String home(Model model) {
         List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
-                .filter(s -> s.getStatus() == Solution.SolutionStatus.PASSED_CORRECT)
+                .filter(s -> s.getStatus() == SolutionStatus.PASSED_CORRECT)
                 .sorted(Comparator.comparingInt(s -> (Integer) s.getResults().stream()
                         .map(SolutionResult::getPoints).mapToInt(Integer::intValue).sum()))
                 .sorted((s1, s2) -> Long.compare(s2.getCreatedAt().getTime(), s1.getCreatedAt().getTime()))
@@ -109,7 +115,7 @@ public class RootController {
     @RequestMapping("/results")
     String results(Model model) {
         List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
-                .filter(s -> s.getStatus() == Solution.SolutionStatus.PASSED_CORRECT)
+                .filter(s -> s.getStatus() == SolutionStatus.PASSED_CORRECT)
                 .sorted(Comparator.comparingInt(s -> (Integer) s.getResults().stream()
                         .map(SolutionResult::getPoints).mapToInt(Integer::intValue).sum()))
                 .sorted((s1, s2) -> Long.compare(s2.getCreatedAt().getTime(), s1.getCreatedAt().getTime()))

@@ -8,6 +8,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
+import pl.edu.uj.mpi.testerka2.core.entities.SolutionStatus;
 import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionResultRepository;
 
@@ -68,9 +69,9 @@ public class PointCalculatorTest {
         doReturn(Collections.singletonList(solutionResult)).when(solution).getResults();
         doReturn(testCase1).when(solutionResult).getTestCase();
 
-        doReturn(Solution.SolutionStatus.PASSED_CORRECT).when(solution1).getStatus();
-        doReturn(Solution.SolutionStatus.PASSED_CORRECT).when(solution2).getStatus();
-        doReturn(Solution.SolutionStatus.PASSED_CORRECT).when(solution3).getStatus();
+        doReturn(SolutionStatus.PASSED_CORRECT).when(solution1).getStatus();
+        doReturn(SolutionStatus.PASSED_CORRECT).when(solution2).getStatus();
+        doReturn(SolutionStatus.PASSED_CORRECT).when(solution3).getStatus();
 
         doReturn(2).when(solutionResult1).getPoints();
         doReturn(5).when(solutionResult2).getPoints();
@@ -115,9 +116,9 @@ public class PointCalculatorTest {
 
     @Test
     public void getPointsFor__returns_average_points_deviation_percentage_across_all_passed_solutions_ever_submitted() {
-        doReturn(Solution.SolutionStatus.PASSED_CORRECT).when(solution1).getStatus();
-        doReturn(Solution.SolutionStatus.PASSED_INCORRECT).when(solution2).getStatus();
-        doReturn(Solution.SolutionStatus.REJECTED).when(solution3).getStatus();
+        doReturn(SolutionStatus.PASSED_CORRECT).when(solution1).getStatus();
+        doReturn(SolutionStatus.PASSED_INCORRECT).when(solution2).getStatus();
+        doReturn(SolutionStatus.REJECTED).when(solution3).getStatus();
 
         // no solutions
         doReturn(Collections.emptyList()).when(solutionResultRepository).findAll();

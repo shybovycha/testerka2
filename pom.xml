@@ -18,8 +18,8 @@
 
     <modules>
         <module>core</module>
-        <module>webapp</module>
         <module>worker</module>
+        <module>webapp</module>
     </modules>
 
     <properties>

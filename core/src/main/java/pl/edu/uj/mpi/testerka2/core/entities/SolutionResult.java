@@ -22,20 +22,21 @@ public class SolutionResult {
     @OneToOne
     private Solution solution;
 
-    private boolean passed;
+    @Enumerated(EnumType.STRING)
+    protected SolutionResultStatus status;
 
     public SolutionResult() {}
 
     public SolutionResult(Solution solution, TestCase testCase) {
         this.solution = solution;
         this.testCase = testCase;
-        this.passed = false;
+        this.status = SolutionResultStatus.PENDING;
     }
 
-    public SolutionResult(Solution solution, TestCase testCase, boolean passed) {
+    public SolutionResult(Solution solution, TestCase testCase, SolutionResultStatus status) {
         this.solution = solution;
         this.testCase = testCase;
-        this.passed = passed;
+        this.status = status;
     }
 
     public TestCase getTestCase() {
@@ -54,12 +55,12 @@ public class SolutionResult {
         this.solution = solution;
     }
 
-    public boolean getPassed() {
-        return passed;
+    public SolutionResultStatus getStatus() {
+        return status;
     }
 
-    public void setPassed(boolean passed) {
-        this.passed = passed;
+    public void setStatus(SolutionResultStatus status) {
+        this.status = status;
     }
 
     public Integer getPoints() {

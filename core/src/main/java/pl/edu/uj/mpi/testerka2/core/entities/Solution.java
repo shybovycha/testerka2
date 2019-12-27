@@ -28,10 +28,6 @@ public class Solution {
     @Transient
     protected int points;
 
-    public enum SolutionStatus {
-        PENDING, CHECKING, REJECTED, PASSED_CORRECT, PASSED_INCORRECT, RUN_ERROR
-    }
-
     @Enumerated(EnumType.STRING)
     protected SolutionStatus status;
 

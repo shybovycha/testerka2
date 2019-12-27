@@ -1,35 +1,25 @@
-package pl.edu.uj.mpi.testerka2.core.checker;
+package pl.edu.uj.mpi.testerka2.worker.solution_checkers;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
+import pl.edu.uj.mpi.testerka2.core.entities.SolutionResultStatus;
 import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
-import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
-import pl.edu.uj.mpi.testerka2.core.repositories.SolutionResultRepository;
-import pl.edu.uj.mpi.testerka2.core.repositories.TestCaseRepository;
 
 import java.util.Collections;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.hasProperty;
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.verify;
 
 @RunWith(MockitoJUnitRunner.StrictStubs.class)
-public class SolutionCheckerTest {
-    @Mock
-    private TestCaseRepository testCaseRepository;
-
-    @Mock
-    private SolutionRepository solutionRepository;
-
-    @Mock
-    private SolutionResultRepository solutionResultRepository;
-
+public class RushHourSolutionCheckerTest {
     @Mock
     private SolutionRunner solutionRunner;
 
@@ -39,16 +29,11 @@ public class SolutionCheckerTest {
     @Mock
     private TestCase testCase;
 
-    private SolutionChecker solutionChecker;
+    private RushHourSolutionChecker solutionChecker;
 
     @Before
     public void setUp() {
-        doNothing().when(solution).setStatus(any(Solution.SolutionStatus.class));
-        doNothing().when(solution).setErrorMessage(any(String.class));
-
-        doReturn(true).when(solutionRunner).accepts(solution);
-
-        solutionChecker = new SolutionChecker(testCaseRepository, solutionRepository, solutionResultRepository, ImmutableList.of(solutionRunner));
+        solutionChecker = new RushHourSolutionChecker();
     }
 
     @Test
@@ -64,17 +49,16 @@ public class SolutionCheckerTest {
                                       "X R 4";
 
         doReturn(input).when(testCase).getInput();
-        doReturn(Collections.singletonList(testCase)).when(testCaseRepository).findAll();
         doReturn(expectedOutput).when(solutionRunner).getOutputFor(solution, input);
 
-        solutionChecker.check(solution);
-
-        verify(solution).setStatus(Solution.SolutionStatus.CHECKING);
-        verify(solution).setStatus(Solution.SolutionStatus.PASSED_CORRECT);
+        assertThat("Results list has one item per test case with the success status",
+                solutionChecker.check(solution, Collections.singletonList(testCase), solutionRunner),
+                contains(hasProperty("status", is(SolutionResultStatus.PASSED_CORRECT)))
+        );
     }
 
-    @Test(expected = InvalidFieldFormatException.class)
-    public void check__throws_exception_for_invalid_output() throws Exception {
+    @Test
+    public void check__sets_error_solution_status_if_solution_check_returns_error() throws Exception {
         final String input = "3\n" +
                              "X 0 3 H 2\n" +
                              "A 4 1 H 2\n" +
@@ -87,9 +71,13 @@ public class SolutionCheckerTest {
                                       "X R 4";
 
         doReturn(input).when(testCase).getInput();
-        doReturn(Collections.singletonList(testCase)).when(testCaseRepository).findAll();
         doReturn(expectedOutput).when(solutionRunner).getOutputFor(solution, input);
 
-        solutionChecker.check(solution);
+        solutionChecker.check(solution, Collections.singletonList(testCase), solutionRunner);
+
+        assertThat("Results list has one item per test case with the success status",
+                solutionChecker.check(solution, Collections.singletonList(testCase), solutionRunner),
+                contains(hasProperty("status", is(SolutionResultStatus.PASSED_INCORRECT)))
+        );
     }
 }
