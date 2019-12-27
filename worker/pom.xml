@@ -36,10 +36,6 @@
                 <configuration>
                     <mainClass>pl.edu.uj.mpi.testerka2.worker.WorkerRunner</mainClass>
                     <classifier>runnable</classifier>
-                    <excludeArtifactIds>
-                        spring-boot-starter-web,
-                        spring-boot-starter-freemarker
-                    </excludeArtifactIds>
                 </configuration>
             </plugin>
 
