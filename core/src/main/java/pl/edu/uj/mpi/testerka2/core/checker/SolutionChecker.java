@@ -419,7 +419,7 @@ public class SolutionChecker {
         // thus make this class being instantiated once
         Iterable<TestCase> testCaseEntities = testCaseRepository.findAll();
 
-        LOG.debug("RUNNING TEST CASES...");
+        LOG.debug("Running test cases...");
 
         // List<SolutionResult> results = new ArrayList<>();
 
@@ -431,12 +431,12 @@ public class SolutionChecker {
                 try {
                     result = checkSingleTest(runner.get(), solution, testCase);
 
-                    LOG.debug("TEST CASE #{}: {}", testCase.getId(), result.getPassed() ? "PASSED" : "FAILED");
+                    LOG.debug("Test case #{}: {}", testCase.getId(), result.getPassed() ? "PASSED" : "FAILED");
                 } catch (TimeoutException e) {
                     e.printStackTrace();
                     result.setOutput("<TIMEOUT>");
 
-                    LOG.error("TEST CASE #{} TIMED OUT", testCase.getId(), e);
+                    LOG.error("Test case #{} timed out", testCase.getId(), e);
                 } finally {
                     solutionResultRepository.save(result);
 
@@ -450,7 +450,7 @@ public class SolutionChecker {
             solution.setErrorMessage(e.getMessage());
             solutionRepository.save(solution);
 
-            LOG.error("ERRORS DURING RUN", e);
+            LOG.error("Errors during run", e);
 
             return;
         }
@@ -461,7 +461,7 @@ public class SolutionChecker {
             solution.setStatus(Solution.SolutionStatus.PASSED_INCORRECT);
         }
 
-        LOG.debug("DONE with status {}", solution.getStatusString());
+        LOG.debug("Done with status {}", solution.getStatusString());
 
         solutionRepository.save(solution);
     }
