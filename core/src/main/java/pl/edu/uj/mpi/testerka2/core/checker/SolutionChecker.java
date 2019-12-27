@@ -461,7 +461,7 @@ public class SolutionChecker {
             solution.setStatus(Solution.SolutionStatus.PASSED_INCORRECT);
         }
 
-        LOG.debug("Done with status {}", solution.getStatusString());
+        LOG.debug("Done with status {}", solution);
 
         solutionRepository.save(solution);
     }
@@ -481,7 +481,7 @@ public class SolutionChecker {
 
         for (Move move : moves) {
             if (!field.isMoveValid(move)) {
-                LOG.debug("Move {} is not valid", move.toString());
+                LOG.debug("Move {} is not valid", move);
                 break;
             }
 
