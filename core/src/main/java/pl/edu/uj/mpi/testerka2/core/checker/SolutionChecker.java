@@ -84,12 +84,13 @@ class Car {
                 || (dir == 'H' && p.y == pos.y && p.x >= pos.x && p.x <= pos.x + len - 1);
     }
 
-    public Car dup() {
+    @Override
+    public Car clone() {
         return new Car(this.id, this.pos.x, this.pos.y, this.dir, this.len);
     }
 
     public Car move(Move move) {
-        Car newCar = this.dup();
+        Car newCar = this.clone();
 
         if (move.dir == 'D') newCar.pos.y -= move.d;
 
@@ -217,7 +218,7 @@ class Field {
         return new Field(
                 this.cars
                         .stream()
-                        .map(c -> (c.id == move.car.id) ? c.move(move) : c.dup())
+                        .map(c -> (c.id == move.car.id) ? c.move(move) : c.clone())
                         .collect(Collectors.toList()));
     }
 
@@ -259,26 +260,20 @@ class Move {
 class FieldParser {
     public FieldParser() {}
 
-    public Field parseField(String input) {
-        try {
-            return parseSilently(input);
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    protected Field parseSilently(String input) throws InvalidCarFormatException {
-        List<Car> cars = new ArrayList<>();
-
+    public Field parseField(String input) throws InvalidFieldFormatException {
         try (Scanner scanner = new Scanner(new StringReader(input))) {
+            List<Car> cars = new ArrayList<>();
+
             int n = Integer.parseInt(scanner.nextLine());
 
             for (int i = 0; i < n; i++) {
                 cars.add(Car.parseString(scanner.nextLine()));
             }
-        }
 
-        return new Field(cars);
+            return new Field(cars);
+        } catch (InvalidCarFormatException e) {
+            throw new InvalidFieldFormatException("Can not parse field", e.getMessage());
+        }
     }
 }
 
@@ -339,7 +334,7 @@ class MoveParser {
         return new Move(car.get(), direction, length);
     }
 
-    public List<Move> parseAll(String input) throws InvalidMoveFormatException {
+    public List<Move> parseAll(String input) throws InvalidFieldFormatException {
         List<Move> res = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(new StringReader(input))) {
@@ -349,6 +344,8 @@ class MoveParser {
                 String s = scanner.nextLine();
                 res.add(this.parseOne(s));
             }
+        } catch (InvalidMoveFormatException e) {
+            throw new InvalidFieldFormatException("Can not parse field", e.getMessage());
         }
 
         return res;
@@ -400,18 +397,18 @@ public class SolutionChecker {
     }
 
     // gets list of test cases passed successfully
-    public void check(Solution solution) {
+    public void check(Solution solution) throws Exception {
         Optional<SolutionRunner> runner = runnersAvailable.stream().filter(r -> r.accepts(solution)).findFirst();
 
         solution.setStatus(Solution.SolutionStatus.CHECKING);
         solutionRepository.save(solution);
 
-        LOG.debug("CHECKING SOLUTION {}", solution.getId());
+        LOG.debug("Checking solution {}", solution.getId());
 
         if (!runner.isPresent()) {
             solution.setStatus(Solution.SolutionStatus.REJECTED);
             solutionRepository.save(solution);
-            LOG.debug("REJECTED - {} HAS NO MATCH", solution.getLanguage());
+            LOG.debug("Rejected  {} has no match", solution.getLanguage());
             return;
         }
 
@@ -431,10 +428,10 @@ public class SolutionChecker {
                 try {
                     result = checkSingleTest(runner.get(), solution, testCase);
 
-                    LOG.debug("Test case #{}: {}", testCase.getId(), result.getPassed() ? "PASSED" : "FAILED");
+                    LOG.debug("Test case #{}: {}", testCase.getId(), result.getPassed() ? "passed" : "failed");
                 } catch (TimeoutException e) {
                     e.printStackTrace();
-                    result.setOutput("<TIMEOUT>");
+                    result.setOutput("<timeout>");
 
                     LOG.error("Test case #{} timed out", testCase.getId(), e);
                 } finally {
@@ -452,7 +449,7 @@ public class SolutionChecker {
 
             LOG.error("Errors during run", e);
 
-            return;
+            throw e;
         }
 
         if (solution.getResults().stream().allMatch(SolutionResult::getPassed)) {
