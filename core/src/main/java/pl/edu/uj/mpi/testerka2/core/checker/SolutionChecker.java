@@ -2,17 +2,14 @@ package pl.edu.uj.mpi.testerka2.core.checker;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.edu.uj.mpi.testerka2.core.checker.exceptions.InvalidCarFormatException;
-import pl.edu.uj.mpi.testerka2.core.checker.exceptions.InvalidFieldFormatException;
-import pl.edu.uj.mpi.testerka2.core.checker.exceptions.InvalidMoveFormatException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
 import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionResultRepository;
 import pl.edu.uj.mpi.testerka2.core.repositories.TestCaseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.io.StringReader;
 import java.util.ArrayList;
@@ -21,6 +18,54 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
 import java.util.stream.Collectors;
+
+class InvalidCarFormatException extends Exception {
+    public InvalidCarFormatException(String carStr, String message) {
+        super(String.format("Invalid car format for string '%s'. %s", carStr, message));
+    }
+}
+
+class InvalidFieldFormatException extends Exception {
+    public InvalidFieldFormatException(String fieldStr, String message) {
+        super(String.format("Invalid field format for string '%s'. %s", fieldStr, message));
+    }
+}
+
+class InvalidMoveFormatException extends Exception {
+    public InvalidMoveFormatException(String moveStr, String message) {
+        super(String.format("Invalid move format for string '%s'. %s", moveStr, message));
+    }
+}
+
+class InvalidNumberOfDescriptorsException extends InvalidCarFormatException {
+    public InvalidNumberOfDescriptorsException(String carStr, int numberOfDescriptors) {
+        super(carStr, String.format("Expected 5 car descriptors, but got %d", numberOfDescriptors));
+    }
+}
+
+class InvalidCarIdException extends InvalidCarFormatException {
+    public InvalidCarIdException(String carStr, String carId) {
+        super(carStr, String.format("Invalid car ID (%s)", carId));
+    }
+}
+
+class InvalidCarPositionException extends InvalidCarFormatException {
+    public InvalidCarPositionException(String carStr, int x, int y) {
+        super(carStr, String.format("Car position (%d, %d) is invalid", x, y));
+    }
+}
+
+class InvalidCarDirectionException extends InvalidCarFormatException {
+    public InvalidCarDirectionException(String carStr, char direction) {
+        super(carStr, String.format("Car direction (%s) is invalid", direction));
+    }
+}
+
+class InvalidCarLengthException extends InvalidCarFormatException {
+    public InvalidCarLengthException(String carStr, int length) {
+        super(carStr, String.format("Car length (%d) is invalid", length));
+    }
+}
 
 class Car {
     public Point pos;
@@ -61,27 +106,27 @@ class Car {
         String[] pieces = input.split(" ");
 
         if (pieces.length != 5)
-            throw new InvalidCarFormatException(input, String.format("Expected 5 car descriptors, but got %d", pieces.length));
+            throw new InvalidNumberOfDescriptorsException(input, pieces.length);
 
         if (pieces[0].length() != 1)
-            throw new InvalidCarFormatException(input, "Car ID is invalid");
+            throw new InvalidCarIdException(input, pieces[0]);
 
         char carId = pieces[0].charAt(0);
 
         int x = Integer.parseInt(pieces[1]), y = Integer.parseInt(pieces[2]);
 
         if (x < 0 || x > 5 || y < 0 || y > 5)
-            throw new InvalidCarFormatException(input, String.format("Car position (%d, %d) is invalid", x, y));
+            throw new InvalidCarPositionException(input, x, y);
 
         char direction = pieces[3].charAt(0);
 
         if (direction != 'V' && direction != 'H')
-            throw new InvalidCarFormatException(input, "Car direction is invalid");
+            throw new InvalidCarDirectionException(input, direction);
 
-        Integer length = Integer.parseInt(pieces[4]);
+        int length = Integer.parseInt(pieces[4]);
 
         if (length < 1 || length > 6)
-            throw new InvalidCarFormatException(input, String.format("Car length (%d) is invalid", length));
+            throw new InvalidCarLengthException(input, length);
 
         return new Car(carId, x, y, direction, length);
     }
@@ -237,6 +282,28 @@ class FieldParser {
     }
 }
 
+class InvalidNumberOfMoveDescriptorsException extends InvalidMoveFormatException {
+    public InvalidNumberOfMoveDescriptorsException(String moveStr, int numberOfDescriptors) {
+        super(moveStr, String.format("Expected 3 move descriptors, but got %d", numberOfDescriptors));
+    }
+}
+
+class InvalidCarIdMoveException extends InvalidMoveFormatException {
+    public InvalidCarIdMoveException(String moveStr, char id) {
+        super(moveStr, String.format("Car ID (%s) is invalid", id));
+    }
+
+    public InvalidCarIdMoveException(String moveStr, String id) {
+        super(moveStr, String.format("Car ID (%s) is invalid", id));
+    }
+}
+
+class InvalidMoveDirectionException extends InvalidMoveFormatException {
+    public InvalidMoveDirectionException(String moveStr, char direction) {
+        super(moveStr, String.format("Move direction (%s) is invalid", direction));
+    }
+}
+
 class MoveParser {
     private Field field;
 
@@ -248,18 +315,18 @@ class MoveParser {
         String[] pieces = input.split(" ");
 
         if (pieces.length != 3)
-            throw new InvalidMoveFormatException(input, String.format("Expected 3 move descriptors, but got %d", pieces.length));
+            throw new InvalidNumberOfMoveDescriptorsException(input, pieces.length);
 
         if (pieces[0].length() != 1)
-            throw new InvalidMoveFormatException(input, "Car ID is invalid");
+            throw new InvalidCarIdMoveException(input, pieces[0]);
 
         char carId = pieces[0].charAt(0);
         char direction = pieces[1].charAt(0);
 
         if (direction != 'D' && direction != 'U' && direction != 'R' && direction != 'L')
-            throw new InvalidMoveFormatException(input, "Move direction is invalid");
+            throw new InvalidMoveDirectionException(input, direction);
 
-        Integer length = Integer.parseInt(pieces[2]);
+        int length = Integer.parseInt(pieces[2]);
 
         Optional<Car> car = this.field.cars
                 .stream()
@@ -267,7 +334,7 @@ class MoveParser {
                 .findFirst();
 
         if (!car.isPresent())
-            throw new InvalidMoveFormatException(input, String.format("Car with this ID ('%s') does not exist", carId));
+            throw new InvalidCarIdMoveException(input, carId);
 
         return new Move(car.get(), direction, length);
     }
