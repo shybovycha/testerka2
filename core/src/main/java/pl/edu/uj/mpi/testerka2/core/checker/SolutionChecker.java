@@ -93,6 +93,8 @@ class Car {
 }
 
 class Field {
+    private static final Logger LOG = LoggerFactory.getLogger(Field.class);
+
     public List<Car> cars;
 
     public Field(List<Car> cars) {
@@ -104,7 +106,7 @@ class Field {
         Optional<Car> moveCar = this.cars.stream().filter(c -> c.id == move.car.id).findFirst();
 
         if (!moveCar.isPresent()) {
-            System.out.printf(">>>> Move %s is invalid: car does not exist\n", move);
+            LOG.debug("Move {} is invalid: car does not exist", move);
             return false;
         }
 
@@ -120,7 +122,7 @@ class Field {
                     Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
                     if (other.isPresent()) {
-                        System.out.printf(">>>> Move %s is invalid - overlapping at %s with %s\n", move, p, other);
+                        LOG.debug("Move {} is invalid - overlapping at {} with {}", move, p, other);
                         return false;
                     }
                 }
@@ -130,7 +132,7 @@ class Field {
                     Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
                     if (other.isPresent()) {
-                        System.out.printf(">>>> Move %s is invalid - overlapping at %s with %s\n", move, p, other);
+                        LOG.debug("Move {} is invalid - overlapping at {} with {}", move, p, other);
                         return false;
                     }
                 }
@@ -144,7 +146,7 @@ class Field {
                     Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
                     if (other.isPresent()) {
-                        System.out.printf(">>>> Move %s is invalid - overlapping at %s with %s\n", move, p, other);
+                        LOG.debug("Move {} is invalid - overlapping at {} with {}", move, p, other);
                         return false;
                     }
                 }
@@ -154,7 +156,7 @@ class Field {
                     Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
                     if (other.isPresent()) {
-                        System.out.printf(">>>> Move %s is invalid - overlapping at %s with %s\n", move, p, other);
+                        LOG.debug("Move {} is invalid - overlapping at {} with {}", move, p, other);
                         return false;
                     }
                 }
@@ -220,7 +222,7 @@ class FieldParser {
         }
     }
 
-    protected Field parseSilently(String input) throws InvalidFieldFormatException {
+    protected Field parseSilently(String input) throws InvalidCarFormatException {
         List<Car> cars = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(new StringReader(input))) {
@@ -229,8 +231,6 @@ class FieldParser {
             for (int i = 0; i < n; i++) {
                 cars.add(Car.parseString(scanner.nextLine()));
             }
-        } catch (Exception e) {
-            // TODO: logger
         }
 
         return new Field(cars);
@@ -272,7 +272,7 @@ class MoveParser {
         return new Move(car.get(), direction, length);
     }
 
-    public List<Move> parseAll(String input) {
+    public List<Move> parseAll(String input) throws InvalidMoveFormatException {
         List<Move> res = new ArrayList<>();
 
         try (Scanner scanner = new Scanner(new StringReader(input))) {
@@ -282,8 +282,6 @@ class MoveParser {
                 String s = scanner.nextLine();
                 res.add(this.parseOne(s));
             }
-        } catch (Exception e) {
-            // TODO: logger
         }
 
         return res;
