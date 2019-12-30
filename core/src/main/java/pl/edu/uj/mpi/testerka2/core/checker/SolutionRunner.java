@@ -22,7 +22,7 @@ public abstract class SolutionRunner {
 
     private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
 
-    private static <T> T timedCall(Callable<T> c, long timeout, TimeUnit timeUnit) throws InterruptedException, ExecutionException, TimeoutException {
+    private static <T> T runWithTimeout(Callable<T> c, long timeout, TimeUnit timeUnit) throws InterruptedException, ExecutionException, TimeoutException {
         FutureTask<T> task = new FutureTask<T>(c);
         THREAD_POOL.execute(task);
         return task.get(timeout, timeUnit);
@@ -53,7 +53,7 @@ public abstract class SolutionRunner {
             writer.write(input);
             writer.close();
 
-            timedCall(process::waitFor, runTimeout, TimeUnit.MILLISECONDS);
+            runWithTimeout(process::waitFor, runTimeout, TimeUnit.MILLISECONDS);
 
             while (stdoutScanner.hasNextLine()) {
                 output.append(stdoutScanner.nextLine()).append("\n");
