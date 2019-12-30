@@ -22,13 +22,13 @@ public abstract class CompiledSolutionRunner extends SolutionRunner {
         Process process = this.getCompilerProcessBuilder(solution).start();
 
         try (Scanner stderrScanner = new Scanner(process.getErrorStream())) {
-	        while (stderrScanner.hasNextLine()) {
-	            errors.append(stderrScanner.nextLine()).append("\n");
-	        }
+            while (stderrScanner.hasNextLine()) {
+                errors.append(stderrScanner.nextLine()).append("\n");
+            }
 
-	        if (errors.length() > 0) {
-	            throw new SolutionCompilationException(errors.toString());
-	        }
+            if (errors.length() > 0) {
+                throw new SolutionCompilationException(errors.toString());
+            }
         }
     }
 

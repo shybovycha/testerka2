@@ -43,9 +43,9 @@ public abstract class SolutionRunner {
         Process process = this.getRunProcessBuilder(solution).start();
 
         try (
-        		Scanner stdoutScanner = new Scanner(process.getInputStream());
-        		Scanner stderrScanner = new Scanner(process.getErrorStream());
-        		PrintWriter writer = new PrintWriter(process.getOutputStream());
+                Scanner stdoutScanner = new Scanner(process.getInputStream());
+                Scanner stderrScanner = new Scanner(process.getErrorStream());
+                PrintWriter writer = new PrintWriter(process.getOutputStream());
         ) {
 
             writer.write("1\n"); // FIXME: number of test cases
@@ -69,7 +69,7 @@ public abstract class SolutionRunner {
         } catch (TimeoutException e) {
             throw new TimeoutException("Solution timed out");
         } finally {
-        	process.destroy();
+            process.destroy();
         }
 
         return output.toString();
