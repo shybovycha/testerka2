@@ -22,18 +22,28 @@ public abstract class SolutionRunner {
 
     private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
 
-    private static <T> T runWithTimeout(Callable<T> c, long timeout, TimeUnit timeUnit) throws InterruptedException, ExecutionException, TimeoutException {
-        FutureTask<T> task = new FutureTask<T>(c);
-        THREAD_POOL.execute(task);
-        return task.get(timeout, timeUnit);
-    }
-
     public boolean accepts(Solution solution) {
         return this.getAcceptedLanguage().equals(solution.getLanguage());
     }
 
     public String getOutputFor(Solution solution, String input) throws Exception {
         return this.runBinary(solution, input);
+    }
+
+    public abstract String getAcceptedLanguage();
+
+    public abstract String getDescription();
+
+    protected abstract String getSourceFilename();
+
+    protected File getSourceFile(Solution solution) {
+        return new File(String.format("%s/%s", this.getSolutionDir(solution), getSourceFilename()));
+    }
+
+    protected abstract ProcessBuilder getRunProcessBuilder(Solution solution);
+
+    protected String getSolutionDir(Solution solution) {
+        return String.format("solutions/%d", solution.getId());
     }
 
     protected String runBinary(Solution solution, String input) throws Exception {
@@ -75,28 +85,29 @@ public abstract class SolutionRunner {
         return output.toString();
     }
 
-    protected abstract ProcessBuilder getRunProcessBuilder(Solution solution);
-
-    public abstract String getAcceptedLanguage();
-
-    public abstract String getDescription();
-
-    protected String getSolutionDir(Solution solution) {
-        return String.format("solutions/%d", solution.getId());
-    }
-
-    protected void writeSolutionToFile(Solution solution, String filename) {
+    protected File writeSolutionToFile(Solution solution) throws SolutionRuntimeException {
         try {
             new File(this.getSolutionDir(solution)).mkdirs();
 
-            File f = new File(String.format("%s/%s", this.getSolutionDir(solution), filename));
+            File f = getSourceFile(solution);
             PrintWriter writer = new PrintWriter(f);
 
             writer.write(solution.getSource());
 
             writer.close();
+
+            return f;
         } catch (Exception e) {
             LOG.error("Error writing solution to a file", e);
+            throw new SolutionRuntimeException(e.getMessage());
         }
+    }
+
+    private static <T> T runWithTimeout(Callable<T> callable, long timeout, TimeUnit timeUnit) throws InterruptedException, ExecutionException, TimeoutException {
+        FutureTask<T> task = new FutureTask<>(callable);
+
+        THREAD_POOL.submit(task);
+
+        return task.get(timeout, timeUnit);
     }
 }
