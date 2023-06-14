@@ -29,7 +29,7 @@
         <mockito.version>3.2.4</mockito.version>
         <hamcrest.version>2.1</hamcrest.version>
 
-        <guava.version>28.1-jre</guava.version>
+        <guava.version>32.0.0-jre</guava.version>
 
         <frontend.maven.plugin.version>1.8.0</frontend.maven.plugin.version>
 
