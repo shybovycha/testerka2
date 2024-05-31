@@ -7,7 +7,7 @@
 
     <parent>
         <groupId>pl.edu.uj.mpi.testerka2</groupId>
-        <artifactId>testerka2-parent-pom</artifactId>
+        <artifactId>parent-pom</artifactId>
         <version>0.1.1-SNAPSHOT</version>
     </parent>
 

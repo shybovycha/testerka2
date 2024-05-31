@@ -7,11 +7,11 @@
 
     <parent>
         <groupId>pl.edu.uj.mpi.testerka2</groupId>
-        <artifactId>testerka2-parent-pom</artifactId>
+        <artifactId>parent-pom</artifactId>
         <version>0.1.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>testerka2-webapp</artifactId>
+    <artifactId>webapp</artifactId>
     <packaging>jar</packaging>
 
     <build>
@@ -68,7 +68,13 @@
     <dependencies>
         <dependency>
             <groupId>pl.edu.uj.mpi.testerka2</groupId>
-            <artifactId>testerka2-core</artifactId>
+            <artifactId>api</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>pl.edu.uj.mpi.testerka2</groupId>
+            <artifactId>solution-runners</artifactId>
             <version>${project.version}</version>
         </dependency>
 

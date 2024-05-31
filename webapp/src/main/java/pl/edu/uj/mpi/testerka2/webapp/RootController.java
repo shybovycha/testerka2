@@ -8,7 +8,6 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,13 +16,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
-import pl.edu.uj.mpi.testerka2.core.checker.PointCalculator;
-import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
-import pl.edu.uj.mpi.testerka2.core.entities.Solution;
-import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
-import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
+import pl.edu.uj.mpi.testerka2.api.checker.PointCalculator;
+import pl.edu.uj.mpi.testerka2.api.checker.SolutionRunner;
+import pl.edu.uj.mpi.testerka2.api.entities.Solution;
+import pl.edu.uj.mpi.testerka2.api.entities.SolutionResult;
+import pl.edu.uj.mpi.testerka2.api.repositories.SolutionRepository;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -35,9 +33,9 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 @EnableAutoConfiguration
-@EnableJpaRepositories("pl.edu.uj.mpi.testerka2.core.repositories")
-@EntityScan("pl.edu.uj.mpi.testerka2.core.entities")
-@ComponentScan(basePackages = {"pl.edu.uj.mpi.testerka2.core"})
+@EnableJpaRepositories("pl.edu.uj.mpi.testerka2.api.repositories")
+@EntityScan("pl.edu.uj.mpi.testerka2.api.entities")
+@ComponentScan(basePackages = {"pl.edu.uj.mpi.testerka2.api", "pl.edu.uj.mpi.testerka2.solution_runners"})
 @Controller
 public class RootController {
     private static final Logger LOG = LoggerFactory.getLogger(RootController.class);

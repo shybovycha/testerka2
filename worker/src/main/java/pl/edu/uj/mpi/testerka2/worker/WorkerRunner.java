@@ -13,9 +13,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import pl.edu.uj.mpi.testerka2.core.checker.SolutionCheckerService;
-import pl.edu.uj.mpi.testerka2.core.entities.Solution;
-import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
+import pl.edu.uj.mpi.testerka2.api.checker.SolutionCheckerService;
+import pl.edu.uj.mpi.testerka2.api.entities.Solution;
+import pl.edu.uj.mpi.testerka2.api.repositories.SolutionRepository;
 
 import java.util.List;
 
@@ -24,10 +24,10 @@ import java.util.List;
  */
 @Component
 @EnableScheduling
-@EnableJpaRepositories("pl.edu.uj.mpi.testerka2.core.repositories")
-@EntityScan("pl.edu.uj.mpi.testerka2.core.entities")
-@ComponentScan(basePackages = { "pl.edu.uj.mpi.testerka2.core" })
-@SpringBootApplication(exclude = { ServletWebServerFactoryAutoConfiguration.class, WebMvcAutoConfiguration.class })
+@EnableJpaRepositories("pl.edu.uj.mpi.testerka2.api.repositories")
+@EntityScan("pl.edu.uj.mpi.testerka2.api.entities")
+@ComponentScan(basePackages = {"pl.edu.uj.mpi.testerka2.api"})
+@SpringBootApplication(exclude = {ServletWebServerFactoryAutoConfiguration.class, WebMvcAutoConfiguration.class})
 public class WorkerRunner {
     private final SolutionRepository solutionRepository;
     private final SolutionCheckerService checkerService;
@@ -35,7 +35,7 @@ public class WorkerRunner {
     @Autowired
     public WorkerRunner(
         SolutionRepository solutionRepository,
-            SolutionCheckerService checkerService
+        SolutionCheckerService checkerService
     ) {
         this.solutionRepository = solutionRepository;
         this.checkerService = checkerService;
