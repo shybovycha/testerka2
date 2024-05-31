@@ -23,27 +23,25 @@
     </modules>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>17</java.version>
 
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.2</junit.version>
         <mockito.version>3.2.4</mockito.version>
-        <hamcrest.version>2.1</hamcrest.version>
+        <hamcrest.version>2.2</hamcrest.version>
 
-        <guava.version>28.1-jre</guava.version>
+        <frontend.maven.plugin.version>1.15.0</frontend.maven.plugin.version>
 
-        <frontend.maven.plugin.version>1.8.0</frontend.maven.plugin.version>
+        <flywaydb.version>10.13.0</flywaydb.version>
 
-        <flywaydb.version>6.1.3</flywaydb.version>
-
-        <mysql.connector.version>8.0.28</mysql.connector.version>
-        <postgresql.version>42.3.3</postgresql.version>
+        <mysql.connector.version>8.4.0</mysql.connector.version>
+        <postgresql.version>42.7.3</postgresql.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql.connector.version}</version>
             </dependency>
 
@@ -51,12 +49,6 @@
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
                 <version>${postgresql.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
             </dependency>
 
             <dependency>
@@ -82,13 +74,15 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.2.5</version>
             </plugin>
 
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.2</version>
+                <version>3.2.5</version>
             </plugin>
         </plugins>
     </build>

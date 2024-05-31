@@ -1,6 +1,5 @@
 package pl.edu.uj.mpi.testerka2.core.checker;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +15,7 @@ import pl.edu.uj.mpi.testerka2.core.repositories.SolutionResultRepository;
 import pl.edu.uj.mpi.testerka2.core.repositories.TestCaseRepository;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doNothing;
@@ -60,8 +60,8 @@ public class SolutionCheckerServiceTest {
         solutionCheckerService = new SolutionCheckerService(testCaseRepository,
                 solutionRepository,
                 solutionResultRepository,
-                ImmutableList.of(solutionRunner),
-                ImmutableList.of(solutionChecker)
+                List.of(solutionRunner),
+                List.of(solutionChecker)
         );
     }
 

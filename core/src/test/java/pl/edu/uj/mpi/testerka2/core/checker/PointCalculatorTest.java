@@ -1,6 +1,5 @@
 package pl.edu.uj.mpi.testerka2.core.checker;
 
-import com.google.common.collect.ImmutableList;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,9 +12,10 @@ import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionResultRepository;
 
 import java.util.Collections;
+import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.doReturn;
 
 @RunWith(MockitoJUnitRunner.StrictStubs.class)
@@ -94,22 +94,22 @@ public class PointCalculatorTest {
         assertThat("Only minimal points are used for deviation", pointCalculator.getPointsFor(solution), is(20));
 
         // only solution1 (2) and solution3 (10)
-        doReturn(ImmutableList.of(solutionResult1, solutionResult3)).when(solutionResultRepository).findAll();
+        doReturn(List.of(solutionResult1, solutionResult3)).when(solutionResultRepository).findAll();
 
         assertThat("Only minimal points are used for deviation", pointCalculator.getPointsFor(solution), is(20));
 
         // only solution2 (5) and solution3 (10)
-        doReturn(ImmutableList.of(solutionResult2, solutionResult3)).when(solutionResultRepository).findAll();
+        doReturn(List.of(solutionResult2, solutionResult3)).when(solutionResultRepository).findAll();
 
         assertThat("Only minimal points are used for deviation", pointCalculator.getPointsFor(solution), is(50));
 
         // solution1 (2), solution2 (5) and solution3 (10)
-        doReturn(ImmutableList.of(solutionResult1, solutionResult2, solutionResult3)).when(solutionResultRepository).findAll();
+        doReturn(List.of(solutionResult1, solutionResult2, solutionResult3)).when(solutionResultRepository).findAll();
 
         assertThat("Only minimal points are used for deviation", pointCalculator.getPointsFor(solution), is(20));
 
         // only solution3 (10)
-        doReturn(ImmutableList.of(solutionResult3)).when(solutionResultRepository).findAll();
+        doReturn(List.of(solutionResult3)).when(solutionResultRepository).findAll();
 
         assertThat("Only minimal points are used for deviation", pointCalculator.getPointsFor(solution), is(100));
     }
@@ -131,22 +131,22 @@ public class PointCalculatorTest {
         assertThat("One passed solution results in the deviation", pointCalculator.getPointsFor(solution), is(20));
 
         // only solution1 (2) and solution3 (10)
-        doReturn(ImmutableList.of(solutionResult1, solutionResult3)).when(solutionResultRepository).findAll();
+        doReturn(List.of(solutionResult1, solutionResult3)).when(solutionResultRepository).findAll();
 
         assertThat("One passed and one incorrect solution result in the deviation of the success solution only", pointCalculator.getPointsFor(solution), is(20));
 
         // only solution2 (5) and solution3 (10)
-        doReturn(ImmutableList.of(solutionResult2, solutionResult3)).when(solutionResultRepository).findAll();
+        doReturn(List.of(solutionResult2, solutionResult3)).when(solutionResultRepository).findAll();
 
         assertThat("One failed and one incorrect solution result in 0 deviation", pointCalculator.getPointsFor(solution), is(0));
 
         // solution1 (2), solution2 (5) and solution3 (10)
-        doReturn(ImmutableList.of(solutionResult1, solutionResult2, solutionResult3)).when(solutionResultRepository).findAll();
+        doReturn(List.of(solutionResult1, solutionResult2, solutionResult3)).when(solutionResultRepository).findAll();
 
         assertThat("One passed, one incorrect and one failed solution result in the deviation of the success solution only", pointCalculator.getPointsFor(solution), is(20));
 
         // only solution3 (10)
-        doReturn(ImmutableList.of(solutionResult3)).when(solutionResultRepository).findAll();
+        doReturn(List.of(solutionResult3)).when(solutionResultRepository).findAll();
 
         assertThat("One failed solution results in 0 deviation", pointCalculator.getPointsFor(solution), is(0));
     }
