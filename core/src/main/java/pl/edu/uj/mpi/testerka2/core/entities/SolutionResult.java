@@ -1,6 +1,6 @@
 package pl.edu.uj.mpi.testerka2.core.entities;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 /**
  * Created by shybovycha on 10/05/16.

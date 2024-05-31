@@ -15,25 +15,13 @@
     <packaging>jar</packaging>
 
     <build>
-        <resources>
-            <resource>
-                <directory>src/main/resources/static</directory>
-                <targetPath>static</targetPath>
-            </resource>
-
-            <resource>
-                <directory>src/main/resources/templates</directory>
-                <targetPath>templates</targetPath>
-            </resource>
-        </resources>
-
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>pl.edu.uj.mpi.testerka2.webapp.RootController</mainClass>
-                    <classifier>runnable</classifier>
+                    <skip>false</skip>
                 </configuration>
             </plugin>
 
@@ -74,12 +62,6 @@
                     <workingDirectory>src/main/resources/static</workingDirectory>
                 </configuration>
             </plugin>
-
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>${flywaydb.version}</version>
-            </plugin>
         </plugins>
     </build>
 
@@ -111,13 +93,18 @@
         </dependency>
 
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
         </dependency>
 
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.freemarker</groupId>
+            <artifactId>freemarker</artifactId>
         </dependency>
     </dependencies>
 </project>

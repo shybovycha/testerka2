@@ -6,7 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,12 +17,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver;
 import pl.edu.uj.mpi.testerka2.core.checker.PointCalculator;
 import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
-
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
@@ -54,8 +57,18 @@ public class RootController {
         this.pointCalculator = pointCalculator;
     }
 
+    @Bean
+    public FreeMarkerViewResolver freemarkerViewResolver() {
+        FreeMarkerViewResolver resolver = new FreeMarkerViewResolver();
+        resolver.setCache(true);
+        resolver.setPrefix("");
+        resolver.setSuffix(".ftl");
+        resolver.setContentType("text/html; charset=utf-8");
+        return resolver;
+    }
+
     @RequestMapping("/")
-    String home(Model model) {
+    public String home(Model model) {
         List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
                 .filter(s -> s.getStatus() == Solution.Status.PASSED_CORRECT)
                 .sorted(Comparator.comparingInt(s -> s.getResults().stream()
@@ -74,7 +87,7 @@ public class RootController {
     }
 
     @RequestMapping(value = "/solution/{id}")
-    String viewSolution(@PathVariable("id") Long solutionId, Model model) {
+    public String viewSolution(@PathVariable("id") Long solutionId, Model model) {
         Optional<Solution> solution = solutionRepository.findById(solutionId);
 
         model.addAttribute("solution", solution.orElse(null));
@@ -83,7 +96,7 @@ public class RootController {
     }
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
-    String submitSolution(@RequestParam("source") MultipartFile sourceFile,
+    public String submitSolution(@RequestParam("source") MultipartFile sourceFile,
                           @RequestParam("language") String language,
                           @RequestParam("author") String author) {
         Solution solution = new Solution();
@@ -112,7 +125,7 @@ public class RootController {
     }
 
     @RequestMapping("/results")
-    String results(Model model) {
+    public String results(Model model) {
         List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
                 .filter(s -> s.getStatus() == Solution.Status.PASSED_CORRECT)
                 .sorted(Comparator.comparingInt(s -> s.getResults().stream()

@@ -35,14 +35,8 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <mainClass>pl.edu.uj.mpi.testerka2.worker.WorkerRunner</mainClass>
-                    <classifier>runnable</classifier>
+                    <skip>false</skip>
                 </configuration>
-            </plugin>
-
-            <plugin>
-                <groupId>org.flywaydb</groupId>
-                <artifactId>flyway-maven-plugin</artifactId>
-                <version>${flywaydb.version}</version>
             </plugin>
         </plugins>
     </build>

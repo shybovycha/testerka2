@@ -1,6 +1,6 @@
 package pl.edu.uj.mpi.testerka2.core.entities;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
