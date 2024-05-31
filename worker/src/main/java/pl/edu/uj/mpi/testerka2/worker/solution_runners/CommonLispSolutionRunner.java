@@ -1,6 +1,7 @@
 package pl.edu.uj.mpi.testerka2.worker.solution_runners;
 
 import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
+import pl.edu.uj.mpi.testerka2.core.checker.exceptions.SolutionRuntimeException;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,10 @@ public class CommonLispSolutionRunner extends SolutionRunner {
     public CommonLispSolutionRunner() {}
 
     @Override
-    protected ProcessBuilder getRunProcessBuilder(Solution solution) {
-        String sourceFileName = "main.lisp";
+    protected ProcessBuilder getRunProcessBuilder(Solution solution) throws SolutionRuntimeException {
+        writeSolutionToFile(solution);
 
-        writeSolutionToFile(solution, sourceFileName);
-
-        ProcessBuilder pb = new ProcessBuilder("sbcl", "--script", "main.lisp");
+        ProcessBuilder pb = new ProcessBuilder("sbcl", "--script", getSourceFilename());
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
@@ -33,5 +32,10 @@ public class CommonLispSolutionRunner extends SolutionRunner {
     @Override
     public String getDescription() {
         return "Common Lisp";
+    }
+
+    @Override
+    protected String getSourceFilename() {
+        return "main.lisp";
     }
 }

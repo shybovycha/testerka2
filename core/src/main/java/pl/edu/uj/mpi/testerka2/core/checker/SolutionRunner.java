@@ -40,7 +40,7 @@ public abstract class SolutionRunner {
         return new File(String.format("%s/%s", this.getSolutionDir(solution), getSourceFilename()));
     }
 
-    protected abstract ProcessBuilder getRunProcessBuilder(Solution solution);
+    protected abstract ProcessBuilder getRunProcessBuilder(Solution solution) throws SolutionRuntimeException;
 
     protected String getSolutionDir(Solution solution) {
         return String.format("solutions/%d", solution.getId());

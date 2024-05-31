@@ -28,7 +28,6 @@ import java.util.List;
 @EnableScheduling
 @EnableJpaRepositories("pl.edu.uj.mpi.testerka2.core.repositories")
 @EntityScan("pl.edu.uj.mpi.testerka2.core.entities")
-@EnableAutoConfiguration
 @ComponentScan(basePackages = { "pl.edu.uj.mpi.testerka2.core" })
 @SpringBootApplication(exclude = { ServletWebServerFactoryAutoConfiguration.class, WebMvcAutoConfiguration.class })
 public class WorkerRunner {

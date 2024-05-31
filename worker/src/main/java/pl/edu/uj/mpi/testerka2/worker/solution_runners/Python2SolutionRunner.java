@@ -1,6 +1,7 @@
 package pl.edu.uj.mpi.testerka2.worker.solution_runners;
 
 import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
+import pl.edu.uj.mpi.testerka2.core.checker.exceptions.SolutionRuntimeException;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,10 @@ public class Python2SolutionRunner extends SolutionRunner {
     public Python2SolutionRunner() {}
 
     @Override
-    protected ProcessBuilder getRunProcessBuilder(Solution solution) {
-        String sourceFileName = "main.py";
+    protected ProcessBuilder getRunProcessBuilder(Solution solution) throws SolutionRuntimeException {
+        writeSolutionToFile(solution);
 
-        writeSolutionToFile(solution, sourceFileName);
-
-        ProcessBuilder pb = new ProcessBuilder("python2", "main.py");
+        ProcessBuilder pb = new ProcessBuilder("python2", getSourceFilename());
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
@@ -33,5 +32,10 @@ public class Python2SolutionRunner extends SolutionRunner {
     @Override
     public String getDescription() {
         return "Python 2";
+    }
+
+    @Override
+    protected String getSourceFilename() {
+        return "main.py";
     }
 }

@@ -1,5 +1,6 @@
 package pl.edu.uj.mpi.testerka2.worker.solution_runners;
 
+import pl.edu.uj.mpi.testerka2.core.checker.exceptions.SolutionRuntimeException;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.checker.CompiledSolutionRunner;
 import org.springframework.stereotype.Service;
@@ -14,12 +15,10 @@ public class CppSolutionRunner extends CompiledSolutionRunner {
     public CppSolutionRunner() {}
 
     @Override
-    protected ProcessBuilder getCompilerProcessBuilder(Solution solution) {
-        String sourceFileName = "main.cpp";
+    protected ProcessBuilder getCompilerProcessBuilder(Solution solution) throws SolutionRuntimeException {
+        writeSolutionToFile(solution);
 
-        writeSolutionToFile(solution, sourceFileName);
-
-        ProcessBuilder pb = new ProcessBuilder("g++", "-o", "main", sourceFileName, "-std=c++11");
+        ProcessBuilder pb = new ProcessBuilder("g++", "-o", "main", getSourceFilename(), "-std=c++11");
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
@@ -41,5 +40,10 @@ public class CppSolutionRunner extends CompiledSolutionRunner {
     @Override
     public String getDescription() {
         return "C++ (GCC)";
+    }
+
+    @Override
+    protected String getSourceFilename() {
+        return "main.cpp";
     }
 }

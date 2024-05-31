@@ -1,6 +1,7 @@
 package pl.edu.uj.mpi.testerka2.core.checker;
 
 import pl.edu.uj.mpi.testerka2.core.checker.exceptions.SolutionCompilationException;
+import pl.edu.uj.mpi.testerka2.core.checker.exceptions.SolutionRuntimeException;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 
 import java.util.Scanner;
@@ -32,5 +33,5 @@ public abstract class CompiledSolutionRunner extends SolutionRunner {
         }
     }
 
-    protected abstract ProcessBuilder getCompilerProcessBuilder(Solution solution);
+    protected abstract ProcessBuilder getCompilerProcessBuilder(Solution solution) throws SolutionRuntimeException;
 }

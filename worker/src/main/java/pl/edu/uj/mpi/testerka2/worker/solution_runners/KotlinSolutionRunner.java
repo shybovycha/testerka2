@@ -1,6 +1,7 @@
 package pl.edu.uj.mpi.testerka2.worker.solution_runners;
 
 import pl.edu.uj.mpi.testerka2.core.checker.CompiledSolutionRunner;
+import pl.edu.uj.mpi.testerka2.core.checker.exceptions.SolutionRuntimeException;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,10 @@ public class KotlinSolutionRunner extends CompiledSolutionRunner {
     public KotlinSolutionRunner() {}
 
     @Override
-    protected ProcessBuilder getCompilerProcessBuilder(Solution solution) {
-        String sourceFileName = "main.kt";
+    protected ProcessBuilder getCompilerProcessBuilder(Solution solution) throws SolutionRuntimeException {
+        writeSolutionToFile(solution);
 
-        writeSolutionToFile(solution, sourceFileName);
-
-        ProcessBuilder pb = new ProcessBuilder("kotlinc", "-include-runtime", sourceFileName, "-d", "main.jar");
+        ProcessBuilder pb = new ProcessBuilder("kotlinc", "-include-runtime", getSourceFilename(), "-d", "main.jar");
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
@@ -41,5 +40,10 @@ public class KotlinSolutionRunner extends CompiledSolutionRunner {
     @Override
     public String getDescription() {
         return "Kotlin 1.0";
+    }
+
+    @Override
+    protected String getSourceFilename() {
+        return "Main.kt";
     }
 }

@@ -1,6 +1,7 @@
 package pl.edu.uj.mpi.testerka2.worker.solution_runners;
 
 import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
+import pl.edu.uj.mpi.testerka2.core.checker.exceptions.SolutionRuntimeException;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import org.springframework.stereotype.Service;
 
@@ -14,12 +15,10 @@ public class RubySolutionRunner extends SolutionRunner {
     public RubySolutionRunner() {}
 
     @Override
-    protected ProcessBuilder getRunProcessBuilder(Solution solution) {
-        String sourceFileName = "main.rb";
+    protected ProcessBuilder getRunProcessBuilder(Solution solution) throws SolutionRuntimeException {
+        writeSolutionToFile(solution);
 
-        writeSolutionToFile(solution, sourceFileName);
-
-        ProcessBuilder pb = new ProcessBuilder("ruby", "main.rb");
+        ProcessBuilder pb = new ProcessBuilder("ruby", getSourceFilename());
         pb.directory(new File(this.getSolutionDir(solution)));
 
         return pb;
@@ -33,5 +32,10 @@ public class RubySolutionRunner extends SolutionRunner {
     @Override
     public String getDescription() {
         return "Ruby";
+    }
+
+    @Override
+    protected String getSourceFilename() {
+        return "main.rb";
     }
 }
