@@ -7,6 +7,10 @@ import javax.persistence.*;
  */
 @Entity
 public class SolutionResult {
+    public enum Status {
+        PENDING, CHECKING, REJECTED, PASSED_CORRECT, PASSED_INCORRECT, RUN_ERROR, TIMEOUT
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -23,17 +27,17 @@ public class SolutionResult {
     private Solution solution;
 
     @Enumerated(EnumType.STRING)
-    protected SolutionResultStatus status;
+    protected SolutionResult.Status status;
 
     public SolutionResult() {}
 
     public SolutionResult(Solution solution, TestCase testCase) {
         this.solution = solution;
         this.testCase = testCase;
-        this.status = SolutionResultStatus.PENDING;
+        this.status = SolutionResult.Status.PENDING;
     }
 
-    public SolutionResult(Solution solution, TestCase testCase, SolutionResultStatus status) {
+    public SolutionResult(Solution solution, TestCase testCase, SolutionResult.Status status) {
         this.solution = solution;
         this.testCase = testCase;
         this.status = status;
@@ -55,11 +59,11 @@ public class SolutionResult {
         this.solution = solution;
     }
 
-    public SolutionResultStatus getStatus() {
+    public SolutionResult.Status getStatus() {
         return status;
     }
 
-    public void setStatus(SolutionResultStatus status) {
+    public void setStatus(SolutionResult.Status status) {
         this.status = status;
     }
 

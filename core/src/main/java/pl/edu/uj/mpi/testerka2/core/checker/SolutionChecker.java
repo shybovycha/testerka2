@@ -5,7 +5,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
-import pl.edu.uj.mpi.testerka2.core.entities.SolutionResultStatus;
 import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
 
 import java.util.ArrayList;
@@ -34,11 +33,11 @@ public abstract class SolutionChecker {
 
                 LOG.debug("Test case #{} for solution #{} finished with {}", testCase.getId(), solution.getId(), result.getStatus());
             } catch (TimeoutException e) {
-                result.setStatus(SolutionResultStatus.TIMEOUT);
+                result.setStatus(SolutionResult.Status.TIMEOUT);
 
                 LOG.debug("Test case #{} for solution #{} timed out", testCase.getId(), solution.getId(), e);
             } catch (Exception e) {
-                result.setStatus(SolutionResultStatus.RUN_ERROR);
+                result.setStatus(SolutionResult.Status.RUN_ERROR);
 
                 LOG.debug("Test case #{} for solution #{} failed with error", testCase.getId(), solution.getId(), e);
             } finally {

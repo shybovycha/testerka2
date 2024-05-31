@@ -10,6 +10,10 @@ import java.util.List;
  */
 @Entity
 public class Solution {
+    public enum Status {
+        PENDING, CHECKING, REJECTED, PASSED_CORRECT, PASSED_INCORRECT, RUN_ERROR, TIMEOUT
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -29,7 +33,7 @@ public class Solution {
     protected int points;
 
     @Enumerated(EnumType.STRING)
-    protected SolutionStatus status;
+    protected Solution.Status status;
 
     @OneToMany(targetEntity = SolutionResult.class, mappedBy = "solution", fetch = FetchType.EAGER)
     protected List<SolutionResult> results;
@@ -38,13 +42,13 @@ public class Solution {
     private Date createdAt;
 
     public Solution() {
-        this.status = SolutionStatus.PENDING;
+        this.status = Solution.Status.PENDING;
         this.language = "UNKNOWN";
     }
 
     public Solution(String source) {
         this.source = source;
-        this.status = SolutionStatus.PENDING;
+        this.status = Solution.Status.PENDING;
         this.language = this.getAcceptedLanguage();
     }
 
@@ -86,11 +90,11 @@ public class Solution {
         this.language = language;
     }
 
-    public SolutionStatus getStatus() {
+    public Solution.Status getStatus() {
         return status;
     }
 
-    public void setStatus(SolutionStatus status) {
+    public void setStatus(Solution.Status status) {
         this.status = status;
     }
 
@@ -103,22 +107,22 @@ public class Solution {
     }
 
     public String getStatusString() {
-        if (status == SolutionStatus.PENDING)
+        if (status == Solution.Status.PENDING)
             return "Waiting for check";
 
-        if (status == SolutionStatus.CHECKING)
+        if (status == Solution.Status.CHECKING)
             return "Checking...";
 
-        if (status == SolutionStatus.REJECTED)
+        if (status == Solution.Status.REJECTED)
             return "Rejected (due to internal system error)";
 
-        if (status == SolutionStatus.PASSED_CORRECT)
+        if (status == Solution.Status.PASSED_CORRECT)
             return "Correct";
 
-        if (status == SolutionStatus.PASSED_INCORRECT)
+        if (status == Solution.Status.PASSED_INCORRECT)
             return "Incorrect";
 
-        if (status == SolutionStatus.RUN_ERROR)
+        if (status == Solution.Status.RUN_ERROR)
             return "Errors while running occurred";
 
         return "Unknown O_o";

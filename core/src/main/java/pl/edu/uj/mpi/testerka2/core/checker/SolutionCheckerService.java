@@ -6,8 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
-import pl.edu.uj.mpi.testerka2.core.entities.SolutionResultStatus;
-import pl.edu.uj.mpi.testerka2.core.entities.SolutionStatus;
 import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionResultRepository;
@@ -48,13 +46,13 @@ public class SolutionCheckerService {
     public void check(Solution solution) {
         Optional<SolutionRunner> runner = runnersAvailable.stream().filter(r -> r.accepts(solution)).findFirst();
 
-        solution.setStatus(SolutionStatus.CHECKING);
+        solution.setStatus(Solution.Status.CHECKING);
         solutionRepository.save(solution);
 
         LOG.debug("Checking solution {}", solution.getId());
 
         if (runner.isEmpty()) {
-            solution.setStatus(SolutionStatus.REJECTED);
+            solution.setStatus(Solution.Status.REJECTED);
             solutionRepository.save(solution);
             LOG.warn("Rejected solution {} - no suitable runner found", solution.getId());
             return;
@@ -67,7 +65,7 @@ public class SolutionCheckerService {
         Optional<SolutionChecker> checker = checkersAvailable.stream().filter(c -> c.accepts(solution)).findFirst();
 
         if (checker.isEmpty()) {
-            solution.setStatus(SolutionStatus.REJECTED);
+            solution.setStatus(Solution.Status.REJECTED);
             solutionRepository.save(solution);
             LOG.warn("Rejected solution {} - no suitable checker found", solution.getId());
             return;
@@ -76,20 +74,20 @@ public class SolutionCheckerService {
         try {
             List<SolutionResult> allResults = checker.get().check(solution, testCases, runner.get());
 
-            Map<SolutionResultStatus, List<SolutionResult>> resultsByStatus = allResults.stream().collect(groupingBy(SolutionResult::getStatus));
+            Map<SolutionResult.Status, List<SolutionResult>> resultsByStatus = allResults.stream().collect(groupingBy(SolutionResult::getStatus));
 
-            if (resultsByStatus.containsKey(SolutionResultStatus.REJECTED)) {
-                solution.setStatus(SolutionStatus.REJECTED);
-            } else if (resultsByStatus.containsKey(SolutionResultStatus.RUN_ERROR)) {
-                solution.setStatus(SolutionStatus.RUN_ERROR);
-            } else if (resultsByStatus.containsKey(SolutionResultStatus.TIMEOUT)) {
-                solution.setStatus(SolutionStatus.TIMEOUT);
-            } else if (resultsByStatus.containsKey(SolutionResultStatus.PASSED_INCORRECT)) {
-                solution.setStatus(SolutionStatus.PASSED_INCORRECT);
-            } else if (resultsByStatus.containsKey(SolutionResultStatus.PASSED_CORRECT)) {
-                solution.setStatus(SolutionStatus.PASSED_CORRECT);
+            if (resultsByStatus.containsKey(SolutionResult.Status.REJECTED)) {
+                solution.setStatus(Solution.Status.REJECTED);
+            } else if (resultsByStatus.containsKey(SolutionResult.Status.RUN_ERROR)) {
+                solution.setStatus(Solution.Status.RUN_ERROR);
+            } else if (resultsByStatus.containsKey(SolutionResult.Status.TIMEOUT)) {
+                solution.setStatus(Solution.Status.TIMEOUT);
+            } else if (resultsByStatus.containsKey(SolutionResult.Status.PASSED_INCORRECT)) {
+                solution.setStatus(Solution.Status.PASSED_INCORRECT);
+            } else if (resultsByStatus.containsKey(SolutionResult.Status.PASSED_CORRECT)) {
+                solution.setStatus(Solution.Status.PASSED_CORRECT);
             } else {
-                solution.setStatus(SolutionStatus.REJECTED);
+                solution.setStatus(Solution.Status.REJECTED);
             }
 
             solutionResultRepository.saveAll(allResults);
@@ -98,7 +96,7 @@ public class SolutionCheckerService {
             solutionRepository.save(solution);
         } catch (Exception e) {
             // but for more critical errors we stop checker
-            solution.setStatus(SolutionStatus.RUN_ERROR);
+            solution.setStatus(Solution.Status.RUN_ERROR);
             solution.setErrorMessage(e.getMessage());
             solutionRepository.save(solution);
 

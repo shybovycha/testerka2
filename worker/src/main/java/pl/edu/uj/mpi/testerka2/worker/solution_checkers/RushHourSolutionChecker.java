@@ -7,7 +7,6 @@ import pl.edu.uj.mpi.testerka2.core.checker.SolutionChecker;
 import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
-import pl.edu.uj.mpi.testerka2.core.entities.SolutionResultStatus;
 import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
 import pl.edu.uj.mpi.testerka2.worker.solution_checkers.rush_hour.Field;
 import pl.edu.uj.mpi.testerka2.worker.solution_checkers.rush_hour.FieldParser;
@@ -30,7 +29,7 @@ public class RushHourSolutionChecker extends SolutionChecker {
 
     @Override
     public void checkSingleTest(SolutionRunner runner, Solution solution, TestCase testCase, SolutionResult result) throws Exception {
-        result.setStatus(SolutionResultStatus.CHECKING);
+        result.setStatus(SolutionResult.Status.CHECKING);
 
         String output = runner.getOutputFor(solution, testCase.getInput());
 
@@ -46,7 +45,7 @@ public class RushHourSolutionChecker extends SolutionChecker {
             for (Move move : moves) {
                 if (!field.isMoveValid(move)) {
                     LOG.debug("Test case #{} for solution #{}: move {} is not valid", testCase.getId(), solution.getId(), move);
-                    result.setStatus(SolutionResultStatus.PASSED_INCORRECT);
+                    result.setStatus(SolutionResult.Status.PASSED_INCORRECT);
                     return;
                 }
 
@@ -54,12 +53,12 @@ public class RushHourSolutionChecker extends SolutionChecker {
             }
 
             if (field.isSolved()) {
-                result.setStatus(SolutionResultStatus.PASSED_CORRECT);
+                result.setStatus(SolutionResult.Status.PASSED_CORRECT);
             } else {
-                result.setStatus(SolutionResultStatus.PASSED_INCORRECT);
+                result.setStatus(SolutionResult.Status.PASSED_INCORRECT);
             }
         } catch (InvalidFieldFormatException e) {
-            result.setStatus(SolutionResultStatus.PASSED_INCORRECT);
+            result.setStatus(SolutionResult.Status.PASSED_INCORRECT);
         }
     }
 }

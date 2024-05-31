@@ -3,7 +3,6 @@ package pl.edu.uj.mpi.testerka2.worker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.autoconfigure.web.servlet.ServletWebServerFactoryAutoConfiguration;
@@ -16,7 +15,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import pl.edu.uj.mpi.testerka2.core.checker.SolutionCheckerService;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
-import pl.edu.uj.mpi.testerka2.core.entities.SolutionStatus;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionRepository;
 
 import java.util.List;
@@ -45,10 +43,10 @@ public class WorkerRunner {
 
     @Scheduled(fixedRate = 5000)
     public void checkForPendingSolutions() {
-        List<Solution> pendingSolutions = solutionRepository.findByStatus(SolutionStatus.PENDING);
+        List<Solution> pendingSolutions = solutionRepository.findByStatus(Solution.Status.PENDING);
 
         for (Solution solution : pendingSolutions) {
-            solution.setStatus(SolutionStatus.CHECKING);
+            solution.setStatus(Solution.Status.CHECKING);
             solutionRepository.save(solution);
 
             checkerService.check(solution);

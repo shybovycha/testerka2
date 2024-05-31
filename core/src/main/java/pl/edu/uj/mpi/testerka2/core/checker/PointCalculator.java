@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
 import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
-import pl.edu.uj.mpi.testerka2.core.entities.SolutionStatus;
 import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
 import pl.edu.uj.mpi.testerka2.core.repositories.SolutionResultRepository;
 
@@ -29,7 +28,7 @@ public class PointCalculator {
         List<SolutionResult> results = (List<SolutionResult>) solutionResultRepository.findAll();
 
         Map<TestCase, List<SolutionResult>> solutionsByTestCase = results.stream()
-                .filter(r -> r.getSolution().getStatus() == SolutionStatus.PASSED_CORRECT)
+                .filter(r -> r.getSolution().getStatus() == Solution.Status.PASSED_CORRECT)
                 .collect(Collectors.groupingBy(SolutionResult::getTestCase));
 
         double avgPercent = solutionsByTestCase

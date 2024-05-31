@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 import pl.edu.uj.mpi.testerka2.core.checker.SolutionRunner;
 import pl.edu.uj.mpi.testerka2.core.entities.Solution;
-import pl.edu.uj.mpi.testerka2.core.entities.SolutionResultStatus;
+import pl.edu.uj.mpi.testerka2.core.entities.SolutionResult;
 import pl.edu.uj.mpi.testerka2.core.entities.TestCase;
 
 import java.util.Collections;
@@ -53,7 +53,7 @@ public class RushHourSolutionCheckerTest {
 
         assertThat("Results list has one item per test case with the success status",
                 solutionChecker.check(solution, Collections.singletonList(testCase), solutionRunner),
-                contains(hasProperty("status", is(SolutionResultStatus.PASSED_CORRECT)))
+                contains(hasProperty("status", is(SolutionResult.Status.PASSED_CORRECT)))
         );
     }
 
@@ -77,7 +77,7 @@ public class RushHourSolutionCheckerTest {
 
         assertThat("Results list has one item per test case with the success status",
                 solutionChecker.check(solution, Collections.singletonList(testCase), solutionRunner),
-                contains(hasProperty("status", is(SolutionResultStatus.PASSED_INCORRECT)))
+                contains(hasProperty("status", is(SolutionResult.Status.PASSED_INCORRECT)))
         );
     }
 }
