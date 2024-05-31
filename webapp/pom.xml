@@ -12,7 +12,6 @@
     </parent>
 
     <artifactId>testerka2-webapp</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <build>
@@ -88,7 +87,7 @@
         <dependency>
             <groupId>pl.edu.uj.mpi.testerka2</groupId>
             <artifactId>testerka2-core</artifactId>
-            <version>0.1.1-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>
