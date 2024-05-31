@@ -27,7 +27,7 @@ public abstract class CompiledSolutionRunner extends SolutionRunner {
                 errors.append(stderrScanner.nextLine()).append("\n");
             }
 
-            if (errors.length() > 0) {
+            if (!errors.isEmpty()) {
                 throw new SolutionCompilationException(errors.toString());
             }
         }

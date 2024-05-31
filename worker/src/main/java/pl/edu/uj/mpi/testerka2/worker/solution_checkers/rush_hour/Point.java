@@ -1,13 +1,6 @@
 package pl.edu.uj.mpi.testerka2.worker.solution_checkers.rush_hour;
 
-public class Point {
-    public int x, y;
-
-    public Point(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
-
+public record Point(int x, int y) {
     public Point subtract(Point other) {
         return new Point(this.x - other.x, this.y - other.y);
     }

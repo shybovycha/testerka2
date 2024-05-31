@@ -19,22 +19,21 @@ public class Field {
     }
 
     public boolean isMoveValid(Move move) {
-        Optional<Car> moveCar = this.cars.stream().filter(c -> c.id == move.car.id).findFirst();
+        Optional<Car> moveCar = this.cars.stream().filter(c -> c.id() == move.car().id()).findFirst();
 
-        if (!moveCar.isPresent()) {
+        if (moveCar.isEmpty()) {
             LOG.debug("Move {} is invalid: car does not exist", move);
             return false;
         }
 
         Car car = moveCar.get();
 
-        List<Car> otherCars =
-                this.cars.stream().filter(c -> c.id != car.id).collect(Collectors.toList());
+        List<Car> otherCars = this.cars.stream().filter(c -> c.id() != car.id()).toList();
 
-        if (car.dir == 'V') {
-            if (move.dir == 'U') {
-                for (int py = 0; py < move.d; ++py) {
-                    Point p = new Point(car.pos.x, car.pos.y + car.len + py);
+        if (car.dir() == Car.Direction.Vertical) {
+            if (move.dir() == Move.Direction.Up) {
+                for (int py = 0; py < move.d(); ++py) {
+                    Point p = new Point(car.pos().x(), car.pos().y() + car.len() + py);
                     Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
                     if (other.isPresent()) {
@@ -42,9 +41,9 @@ public class Field {
                         return false;
                     }
                 }
-            } else if (move.dir == 'D') {
-                for (int py = 0; py < move.d; ++py) {
-                    Point p = new Point(car.pos.x, car.pos.y - py);
+            } else if (move.dir() == Move.Direction.Down) {
+                for (int py = 0; py < move.d(); ++py) {
+                    Point p = new Point(car.pos().x(), car.pos().y() - py);
                     Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
                     if (other.isPresent()) {
@@ -56,9 +55,9 @@ public class Field {
                 return false;
             }
         } else {
-            if (move.dir == 'R') {
-                for (int px = 0; px < move.d; ++px) {
-                    Point p = new Point(car.pos.x + car.len + px, car.pos.y);
+            if (move.dir() == Move.Direction.Right) {
+                for (int px = 0; px < move.d(); ++px) {
+                    Point p = new Point(car.pos().x() + car.len() + px, car.pos().y());
                     Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
                     if (other.isPresent()) {
@@ -66,9 +65,9 @@ public class Field {
                         return false;
                     }
                 }
-            } else if (move.dir == 'L') {
-                for (int px = 0; px < move.d; ++px) {
-                    Point p = new Point(car.pos.x - px, car.pos.y);
+            } else if (move.dir() == Move.Direction.Left) {
+                for (int px = 0; px < move.d(); ++px) {
+                    Point p = new Point(car.pos().x() - px, car.pos().y());
                     Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
                     if (other.isPresent()) {
@@ -88,12 +87,12 @@ public class Field {
         return new Field(
                 this.cars
                         .stream()
-                        .map(c -> (c.id == move.car.id) ? c.move(move) : c.clone())
+                        .map(c -> (c.id() == move.car().id()) ? c.move(move) : c)
                         .collect(Collectors.toList()));
     }
 
     protected Car getXCar() {
-        return this.cars.stream().filter(c -> c.id == 'X').findFirst().get();
+        return this.cars.stream().filter(c -> c.id() == 'X').findFirst().orElse(null);
     }
 
     public boolean isSolved() {

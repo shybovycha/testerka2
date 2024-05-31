@@ -53,7 +53,7 @@ public class SolutionCheckerService {
 
         LOG.debug("Checking solution {}", solution.getId());
 
-        if (!runner.isPresent()) {
+        if (runner.isEmpty()) {
             solution.setStatus(SolutionStatus.REJECTED);
             solutionRepository.save(solution);
             LOG.warn("Rejected solution {} - no suitable runner found", solution.getId());
@@ -66,7 +66,7 @@ public class SolutionCheckerService {
 
         Optional<SolutionChecker> checker = checkersAvailable.stream().filter(c -> c.accepts(solution)).findFirst();
 
-        if (!checker.isPresent()) {
+        if (checker.isEmpty()) {
             solution.setStatus(SolutionStatus.REJECTED);
             solutionRepository.save(solution);
             LOG.warn("Rejected solution {} - no suitable checker found", solution.getId());

@@ -73,7 +73,7 @@ public abstract class SolutionRunner {
                 errors.append(stderrScanner.nextLine()).append("\n");
             }
 
-            if (errors.length() > 0) {
+            if (!errors.isEmpty()) {
                 throw new SolutionRuntimeException(errors.toString());
             }
         } catch (TimeoutException e) {

@@ -19,7 +19,7 @@ public class SolutionResult {
 
     private Integer points;
 
-    @OneToOne
+    @ManyToOne
     private Solution solution;
 
     @Enumerated(EnumType.STRING)

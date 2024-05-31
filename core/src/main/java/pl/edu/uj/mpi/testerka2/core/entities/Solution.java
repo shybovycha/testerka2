@@ -145,7 +145,7 @@ public class Solution {
     }
 
     public String getCreatedAtStr() {
-        SimpleDateFormat fmt = new SimpleDateFormat("YYYY-MM-dd HH:mm");
+        SimpleDateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         return fmt.format(createdAt);
     }
 

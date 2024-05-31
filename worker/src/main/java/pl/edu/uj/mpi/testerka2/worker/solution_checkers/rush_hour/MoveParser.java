@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.Scanner;
 
 public class MoveParser {
-    private Field field;
+    private final Field field;
 
     public MoveParser(Field field) {
         this.field = field;
@@ -29,19 +29,19 @@ public class MoveParser {
             throw new InvalidCarIdMoveException(input, pieces[0]);
 
         char carId = pieces[0].charAt(0);
-        char direction = pieces[1].charAt(0);
+        char directionChar = pieces[1].charAt(0);
 
-        if (direction != 'D' && direction != 'U' && direction != 'R' && direction != 'L')
-            throw new InvalidMoveDirectionException(input, direction);
+        Move.Direction direction = Move.Direction.fromChar(directionChar)
+            .orElseThrow(() -> new InvalidMoveDirectionException(input, directionChar));
 
         int length = Integer.parseInt(pieces[2]);
 
         Optional<Car> car = this.field.cars
                 .stream()
-                .filter(c -> (c.id == carId))
+                .filter(c -> (c.id() == carId))
                 .findFirst();
 
-        if (!car.isPresent())
+        if (car.isEmpty())
             throw new InvalidCarIdMoveException(input, carId);
 
         return new Move(car.get(), direction, length);

@@ -31,8 +31,8 @@ import java.util.List;
 @ComponentScan(basePackages = { "pl.edu.uj.mpi.testerka2.core" })
 @SpringBootApplication(exclude = { ServletWebServerFactoryAutoConfiguration.class, WebMvcAutoConfiguration.class })
 public class WorkerRunner {
-    private SolutionRepository solutionRepository;
-    private SolutionCheckerService checkerService;
+    private final SolutionRepository solutionRepository;
+    private final SolutionCheckerService checkerService;
 
     @Autowired
     public WorkerRunner(

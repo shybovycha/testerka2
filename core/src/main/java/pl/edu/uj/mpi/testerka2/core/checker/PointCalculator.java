@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  */
 @Service
 public class PointCalculator {
-    private SolutionResultRepository solutionResultRepository;
+    private final SolutionResultRepository solutionResultRepository;
 
     @Autowired
     public PointCalculator(SolutionResultRepository solutionResultRepository) {

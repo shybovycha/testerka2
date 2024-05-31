@@ -29,6 +29,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.TreeMap;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
@@ -40,9 +41,9 @@ import java.util.stream.StreamSupport;
 public class RootController {
     private static final Logger LOG = LoggerFactory.getLogger(RootController.class);
 
-    private SolutionRepository solutionRepository;
-    private List<SolutionRunner> availableRunners;
-    private PointCalculator pointCalculator;
+    private final SolutionRepository solutionRepository;
+    private final List<SolutionRunner> availableRunners;
+    private final PointCalculator pointCalculator;
 
     @Autowired
     public RootController(
@@ -59,7 +60,7 @@ public class RootController {
     String home(Model model) {
         List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
                 .filter(s -> s.getStatus() == SolutionStatus.PASSED_CORRECT)
-                .sorted(Comparator.comparingInt(s -> (Integer) s.getResults().stream()
+                .sorted(Comparator.comparingInt(s -> s.getResults().stream()
                         .map(SolutionResult::getPoints).mapToInt(Integer::intValue).sum()))
                 .sorted((s1, s2) -> Long.compare(s2.getCreatedAt().getTime(), s1.getCreatedAt().getTime()))
                 .collect(Collectors.toList());
@@ -116,10 +117,10 @@ public class RootController {
     String results(Model model) {
         List<Solution> solutions = StreamSupport.stream(solutionRepository.findAll().spliterator(), false)
                 .filter(s -> s.getStatus() == SolutionStatus.PASSED_CORRECT)
-                .sorted(Comparator.comparingInt(s -> (Integer) s.getResults().stream()
+                .sorted(Comparator.comparingInt(s -> s.getResults().stream()
                         .map(SolutionResult::getPoints).mapToInt(Integer::intValue).sum()))
                 .sorted((s1, s2) -> Long.compare(s2.getCreatedAt().getTime(), s1.getCreatedAt().getTime()))
-                .collect(Collectors.toList());
+                .toList();
 
         solutions.forEach(s -> s.setPoints(pointCalculator.getPointsFor(s)));
 
