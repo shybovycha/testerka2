@@ -38,15 +38,17 @@ public class RushHourSolutionCheckerTest {
 
     @Test
     public void check__sets_the_checking_and_passed_status() throws Exception {
-        final String input = "3\n" +
-                             "X 0 3 H 2\n" +
-                             "A 4 1 H 2\n" +
-                             "C 4 2 V 3";
+        final String input = """
+            3
+            X 0 3 H 2
+            A 4 1 H 2
+            C 4 2 V 3""";
 
-        final String expectedOutput = "3\n" +
-                                      "A L 2\n" +
-                                      "C D 2\n" +
-                                      "X R 4";
+        final String expectedOutput = """
+            3
+            A L 2
+            C D 2
+            X R 4""";
 
         doReturn(input).when(testCase).getInput();
         doReturn(expectedOutput).when(solutionRunner).getOutputFor(solution, input);
@@ -59,16 +61,18 @@ public class RushHourSolutionCheckerTest {
 
     @Test
     public void check__sets_error_solution_status_if_solution_check_returns_error() throws Exception {
-        final String input = "3\n" +
-                             "X 0 3 H 2\n" +
-                             "A 4 1 H 2\n" +
-                             "C 4 2 V 3";
+        final String input = """
+            3
+            X 0 3 H 2
+            A 4 1 H 2
+            C 4 2 V 3""";
 
-        final String expectedOutput = "1\n" +
-                                      "3\n" +
-                                      "A L 2\n" +
-                                      "C D 2\n" +
-                                      "X R 4";
+        final String expectedOutput = """
+            1
+            3
+            A L 2
+            C D 2
+            X R 4""";
 
         doReturn(input).when(testCase).getInput();
         doReturn(expectedOutput).when(solutionRunner).getOutputFor(solution, input);
