@@ -12,7 +12,7 @@ public class FieldParser {
     public FieldParser() {}
 
     public Field parseField(String input) throws InvalidFieldFormatException {
-        try (Scanner scanner = new Scanner(new StringReader(input))) {
+        try (Scanner scanner = new Scanner(new StringReader(input.trim()))) {
             List<Car> cars = new ArrayList<>();
 
             int n = Integer.parseInt(scanner.nextLine());

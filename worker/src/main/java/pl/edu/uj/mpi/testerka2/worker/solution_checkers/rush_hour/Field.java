@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class Field {
     private static final Logger LOG = LoggerFactory.getLogger(Field.class);
+
+    private record Tuple<A, B>(A first, B second) {}
 
     public List<Car> cars;
 
@@ -30,54 +33,30 @@ public class Field {
 
         List<Car> otherCars = this.cars.stream().filter(c -> c.id() != car.id()).toList();
 
-        if (car.dir() == Car.Direction.Vertical) {
-            if (move.dir() == Move.Direction.Up) {
-                for (int py = 0; py < move.d(); ++py) {
-                    Point p = new Point(car.pos().x(), car.pos().y() + car.len() + py);
-                    Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
-
-                    if (other.isPresent()) {
-                        LOG.debug("Move {} is invalid - overlapping at {} with {}", move, p, other);
-                        return false;
+        Optional<Tuple<Car, Point>> collision = IntStream.range(0, move.d())
+            .mapToObj(i -> {
+                if (car.dir() == Car.Direction.Vertical) {
+                    if (move.dir() == Move.Direction.Up) {
+                        return new Point(car.pos().x(), car.pos().y() + car.len() + i);
+                    } else if (move.dir() == Move.Direction.Down) {
+                        return new Point(car.pos().x(), car.pos().y() - i);
+                    }
+                } else if (car.dir() == Car.Direction.Horizontal) {
+                    if (move.dir() == Move.Direction.Left) {
+                        return new Point(car.pos().x() - i, car.pos().y());
+                    } else if (move.dir() == Move.Direction.Right) {
+                        return new Point(car.pos().x() + car.len() + i, car.pos().y());
                     }
                 }
-            } else if (move.dir() == Move.Direction.Down) {
-                for (int py = 0; py < move.d(); ++py) {
-                    Point p = new Point(car.pos().x(), car.pos().y() - py);
-                    Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
 
-                    if (other.isPresent()) {
-                        LOG.debug("Move {} is invalid - overlapping at {} with {}", move, p, other);
-                        return false;
-                    }
-                }
-            } else {
-                return false;
-            }
-        } else {
-            if (move.dir() == Move.Direction.Right) {
-                for (int px = 0; px < move.d(); ++px) {
-                    Point p = new Point(car.pos().x() + car.len() + px, car.pos().y());
-                    Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
+                return null;
+            })
+            .flatMap(p -> otherCars.stream().filter(c -> c.checkCollision(p)).map(c -> new Tuple<>(c, p)))
+            .findFirst();
 
-                    if (other.isPresent()) {
-                        LOG.debug("Move {} is invalid - overlapping at {} with {}", move, p, other);
-                        return false;
-                    }
-                }
-            } else if (move.dir() == Move.Direction.Left) {
-                for (int px = 0; px < move.d(); ++px) {
-                    Point p = new Point(car.pos().x() - px, car.pos().y());
-                    Optional<Car> other = otherCars.stream().filter(c -> c.checkCollision(p)).findFirst();
-
-                    if (other.isPresent()) {
-                        LOG.debug("Move {} is invalid - overlapping at {} with {}", move, p, other);
-                        return false;
-                    }
-                }
-            } else {
-                return false;
-            }
+        if (collision.isPresent()) {
+            collision.ifPresent(t -> LOG.debug("Move {} is invalid - overlapping at {} with {}", move, car, t.first()));
+            return false;
         }
 
         return true;

@@ -107,25 +107,16 @@ public class Solution {
     }
 
     public String getStatusString() {
-        if (status == Solution.Status.PENDING)
-            return "Waiting for check";
+        return switch (status) {
+            case PENDING -> "Waiting for check";
+            case CHECKING -> "Checking...";
+            case REJECTED -> "Rejected (due to internal system error)";
+            case PASSED_CORRECT -> "Correct";
+            case PASSED_INCORRECT -> "Incorrect";
+            case RUN_ERROR -> "Errors while running occurred";
+            default -> "Unknown O_o";
+        };
 
-        if (status == Solution.Status.CHECKING)
-            return "Checking...";
-
-        if (status == Solution.Status.REJECTED)
-            return "Rejected (due to internal system error)";
-
-        if (status == Solution.Status.PASSED_CORRECT)
-            return "Correct";
-
-        if (status == Solution.Status.PASSED_INCORRECT)
-            return "Incorrect";
-
-        if (status == Solution.Status.RUN_ERROR)
-            return "Errors while running occurred";
-
-        return "Unknown O_o";
     }
 
     public String getErrorMessage() {
